@@ -1,3 +1,3 @@
 import stateInterface from './stateInterface'
 
-export const myData = (state: stateInterface) => state.myData;
+export const token = (state: stateInterface) => state.token;

@@ -1,3 +1,3 @@
 export default interface StateInterface {
-    myData:String
+    token:String
 }

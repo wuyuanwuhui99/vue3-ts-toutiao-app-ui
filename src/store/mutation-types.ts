@@ -1,1 +1,1 @@
-export const MY_DATA = 'MY_DATA'
+export const TOKEN = 'TOKEN'
