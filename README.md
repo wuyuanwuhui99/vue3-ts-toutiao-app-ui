@@ -1,4 +1,4 @@
-# muvue3
+# vue3-toutiao-app-ui
 
 ## Project setup
 ```
