@@ -1,4 +1,7 @@
 import stateInterface from './stateInterface'
+
 export default <stateInterface>{
-    token: 'aaa'
+    token: '',
+    userData: null,
+    favoriteChannels: []
 }

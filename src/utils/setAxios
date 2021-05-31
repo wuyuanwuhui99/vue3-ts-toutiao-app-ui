@@ -14,7 +14,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use((res)=> {
     if(res.data.status=="SUCCESS" && res.data.token){
-        store.dispatch(TOKEN, res.data.token)
+        store.commit(TOKEN, res.data.token)
         localStorage.setItem("token",res.data.token);
     }
     return res.data;
