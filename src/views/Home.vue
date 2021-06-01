@@ -1,24 +1,26 @@
 <template>
     <div class="home">
         <ul id="nav-list">
-            <li class="nav-item">关注</li>
-            <li class="nav-item">推荐</li>
+            <li class="nav-item" v-for="item,index in favoriteChannels" :key="'nav-item'+index">{{item.channelName}}</li>
         </ul>
     </div>
 </template>
 
 <script lang="ts">
-    import {defineComponent} from 'vue'
+    import {defineComponent,computed} from 'vue'
     import {getUserDataService,getFavoriteChannelsList} from "../service/homeService";
+    import { useStore } from 'vuex'
+    import mapGetters from "../store/mapGetters";
 
     export default defineComponent({
         name: 'Home',
-        components: {
-
-        },
         async setup() {
             await getUserDataService();//获取用户信息
             await getFavoriteChannelsList();//获取频道信息
+            let {favoriteChannels} = mapGetters(["favoriteChannels"]);
+            return {
+                favoriteChannels
+            }
         }
     })
 </script>
