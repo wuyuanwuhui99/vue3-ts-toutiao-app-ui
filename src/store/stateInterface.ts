@@ -1,7 +1,7 @@
 import {ChannelsInterface, UserDataInterface} from "../types"
 
 export default interface StateInterface {
-    token: String,
+    token: string,
     userData: UserDataInterface | null,
     favoriteChannels: Array<ChannelsInterface>
 }
