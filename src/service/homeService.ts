@@ -19,7 +19,6 @@ export const getArticleListService = async (params:ArticleParamsInterface) => {
         let {data} = await axios.get(api.getArticleList, {
             params
         })
-        let result = data as Array<ArticleInterface>
-        resolve(result)
+        resolve(data)
     })
 }
