@@ -55,6 +55,7 @@ export interface ArticleParamsInterface {
     pageNum:number,//页码
     pageSize: number,//每页长度
     isTop?:string //是否置顶
+    type?:string
 }
 
 

@@ -1,45 +1,65 @@
 <template>
     <div id="home">
-        <div id="nav-wrapper">
-            <ul id="nav-list">
-                <li class="nav-item" @click="tabChannel(item)" :class="{'nav-item-active':activeChannelId == item.channelId}" v-for="item,index in favoriteChannels" :key="'nav-item'+index">
-                    {{item.channelName}}
-                </li>
-            </ul>
-            <i class="iconfont iconfont-search"></i>
-        </div>
-        <div id="section" ref="section">
-            <div>
-                <ul id="articles" ref="articles">
-                    <li class="article-item" :key="'article-item'+index" v-for="item,index in articleList">
-                        <p class="title">{{item.title}}</p>
-                        <div class="footer-wrapper">
-                            <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
-                            <a class="footer-item">{{item.userId}}</a>
-                            <time class="footer-item">{{fomatTime("2021-6-6 12:08")}}</time>
-                        </div>
-                    </li>
-                </ul>
-                <template v-if="articleList.length>0">
-                    <div class="loading-tip" v-if="isEnd">已经到底了</div>
-                    <div class="icon-loading" v-else></div>
-                </template>
+
+        <div id="tab-wrapper">
+            <div class="section"  v-show="bottomTabIndex == 0">
+                <div id="nav-wrapper">
+                    <ul id="nav-list">
+                        <li class="nav-item" @click="tabChannel(item)" :class="{'nav-item-active':activeId == item.id}" v-for="item,index in favoriteChannels" :key="'nav-item'+index">
+                            {{item.channelName}}
+                        </li>
+                    </ul>
+                    <i class="iconfont iconfont-search"></i>
+                </div>
+                <div ref="scrollWrapper" id="scroll-wrapper">
+                    <div class="scroll-container">
+                        <div class="loading-box" v-if="!isInit"></div>
+                        <ul id="articles" ref="articles">
+                            <li class="article-item" :key="'article-item'+index+activeId" v-for="item,index in articleList">
+                                <p class="title">{{item.title}}</p>
+                                <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
+                                    <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
+                                </div>
+                                <div class="footer-wrapper">
+                                    <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
+                                    <a class="footer-item">{{item.userId}}</a>
+                                    <time class="footer-item">{{fomatTime(item.createTime)}}</time>
+                                </div>
+                            </li>
+                        </ul>
+                        <template v-if="articleList.length>0">
+                            <div class="loading-tip" v-if="isEnd">已经到底了</div>
+                            <div class="icon-loading" v-else></div>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+            <div class="section" v-show="bottomTabIndex == 1">
+
+            </div>
+            <div class="section" v-show="bottomTabIndex == 2">
+
+            </div>
+            <div class="section" v-show="bottomTabIndex == 3">
+
             </div>
         </div>
+
         <ul id="footer-tab-wrapper">
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':tabIndex == 0}" @click="tabIndex = 0">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 0}" @click="bottomTabIndex = 0">
                 <i class="iconfont iconfont-tab iconfont-tab-home"></i>
                 <span class="tab-text">首页</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':tabIndex == 1}" @click="tabIndex = 1">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 1}" @click="bottomTabIndex = 1">
                 <i class="iconfont iconfont-tab iconfont-tab-video"></i>
-                <span class="tab-text">西瓜视频</span>
+                <span class="tab-text">视频</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':tabIndex == 2}" @click="tabIndex = 2">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 2}" @click="bottomTabIndex = 2">
                 <i class="iconfont iconfont-tab iconfont-tab-play"></i>
                 <span class="tab-text">放映厅</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':tabIndex == 3}" @click="tabIndex = 3">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 3}" @click="bottomTabIndex = 3">
                 <i class="iconfont iconfont-tab iconfont-tab-my"></i>
                 <span class="tab-text">我的</span>
             </li>
@@ -48,12 +68,11 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,reactive,onMounted,ref,nextTick,toRefs} from 'vue'
+    import {defineComponent,reactive,ref,nextTick} from 'vue'
     import {getUserDataService, getFavoriteChannelsListService, getArticleListService} from "../service/homeService";
     import mapGetters from "../store/mapGetters";
-    import {ArticleParamsInterface, ChannelsInterface} from "../types";
+    import {ArticleParamsInterface, ChannelsInterface, ArticleInterface} from "../types";
     import {fomatTime} from "../utils/index";
-    import {ArticleInterface} from "../types";
     import scroll from "../components/scroll.vue";
     import BScroll from "better-scroll";
     export default defineComponent({
@@ -61,47 +80,47 @@
         components:{scroll},
         async setup() {
             let {favoriteChannels} = mapGetters(["favoriteChannels"]);
-            let activeChannelId = ref("")
+            let activeId = ref("")
             let articleList = reactive<Array<ArticleInterface>>([])
             let bscroll: BScroll;
             let isEnd = false;
-            const section = ref<HTMLElement>()
-            let tabIndex = ref<Number>(0)
-
-            const articleListParams: ArticleParamsInterface = {
+            let loading = false;
+            let isInit = ref(false)
+            const scrollWrapper = ref<HTMLElement>()
+            let bottomTabIndex = ref<Number>(0)
+            let articleListParams: ArticleParamsInterface = {
                 pageNum: 1,
                 pageSize: 20,
+                channelId: "",
             }
 
-            const tabChannel = ({channelId,href,id}) => {
-                if(channelId)activeChannelId.value = channelId
+            /**
+             * @author: wuwenqiang
+             * @description: 切换频道
+             * @date: 2020-06-27 21:29
+             */
+            const tabChannel = (channelItem:ChannelsInterface) => {
+                activeId.value = channelItem.id
+                articleListParams = {
+                    pageNum: 1,
+                    pageSize: 20,
+                    channelId: channelItem.channelId,
+                }
+                isEnd = false
+                articleList.splice(0,articleList.length)
+                if(channelItem.channelName == "西瓜视频")articleListParams.type = "video"
+                loadMore()
             }
 
-
-            await getUserDataService();//获取用户信息
-            await getFavoriteChannelsListService();//获取频道信息
-            let {channelId}= favoriteChannels.value.find((item: ChannelsInterface) => item.status == 1)
-            activeChannelId.value = articleListParams.channelId = channelId;
-            let reuslt = await getArticleListService(articleListParams)
-            articleList.push(...reuslt as Array<ArticleInterface>)
-
-            setTimeout(()=>{
-                bscroll = new BScroll(section.value, {
-                    probeType: 1,
-                    click: true,
-                });
-                bscroll.on('scrollEnd', () => {
-                    if (bscroll.y <= (bscroll.maxScrollY + 50)) {
-                        loadMore()
-                    }
-                })
-            },100)
-
-
+            /**
+             * @author: wuwenqiang
+             * @description: 加载数据
+             * @date: 2020-06-27 21:29
+             */
             const loadMore = async () => {
-                if (isEnd) return;
-                articleListParams.pageNum++
-                let reuslt = await getArticleListService(articleListParams)
+                if (isEnd || loading) return;
+                loading = true
+                let reuslt = await getArticleListService(articleListParams).finally(()=>{loading=false})
                 if (reuslt.length == 0) {
                     isEnd = true
                 }
@@ -111,19 +130,128 @@
                 })
             }
 
+            /**
+             * @author: wuwenqiang
+             * @description: 获取图片html
+             * @date: 2020-06-27 21:29
+             */
+            const getImgHtml = (htmlStr:string,length:number,index:number) =>{
+                if (index == 3 && length > 4){
+                    return `<div class="img-num">+${length-index-1}</div>${htmlStr}`
+                }else{
+                    return htmlStr
+                }
+            }
+
+            const getImg = (article:ArticleInterface)=>{
+                if (article.type == "video")return article.img ?  [`<div class="iconfont iconfont-play"></div><img src='${article.img}'/><div class="duration">${article.duration}</div>`] : []
+                return article.content.match(/<img[^<>]+>/g) || []
+            }
+
+            await getUserDataService();//获取用户信息
+            await getFavoriteChannelsListService();//获取频道信息
+            let {channelId,id}= favoriteChannels.value.find((item: ChannelsInterface) => item.status == 1)
+            articleListParams.channelId = channelId;
+            activeId.value = id
+            let reuslt = await getArticleListService(articleListParams).finally(()=>{
+                isInit.value = true
+            })
+            articleList.push(...reuslt as Array<ArticleInterface>)
+
+            setTimeout(()=>{
+                bscroll = new BScroll(scrollWrapper.value, {
+                    probeType: 1,
+                    click: true,
+                });
+                bscroll.on('scrollEnd', () => {
+                    if (bscroll.y <= (bscroll.maxScrollY + 100) && !isEnd && !loading) {
+                        articleListParams.pageNum++
+                        loadMore()
+                    }
+                })
+            },100)
+
             return {
                 tabChannel,
-                activeChannelId,
+                activeId,
+                getImg,
                 favoriteChannels,
                 fomatTime,
                 articleList,
-                section,
+                scrollWrapper,
                 isEnd,
-                tabIndex
+                bottomTabIndex,
+                getImgHtml,
+                isInit
             }
         }
     })
 </script>
+<style lang="less">
+    @import "../common/style/variable.less";
+    .img-wrapper{
+        .img-container{
+            max-width: 25%;
+            max-height: 10rem;
+            overflow: hidden;
+            display: flex;
+            flex: 1;
+            margin-left: 0.5rem;
+            position: relative;
+            &.img-container-video{
+                max-width: 100%;
+                width: 100%;
+                max-height: 20rem;
+            }
+            .iconfont-play{
+                position: absolute;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+                font-size: @article-title-font-size;
+            }
+            .duration{
+                position: absolute;
+                bottom: 0.5rem;
+                right: 0.5rem;
+                color: #fff;
+                z-index: 1;
+                font-size: 0.8rem;
+                background: rgba(0,0,0,0.3);
+                border-radius: 0.2rem;
+                padding:0.1rem 0.2rem;
+            }
+            .img-num{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: rgba(0,0,0,0.3);
+                color: #fff;
+                font-size: @article-title-font-size;
+                position: absolute;
+                top: 0;
+                height: 0;
+                z-index: 1;
+                width: 100%;
+                height: 100%;
+            }
+            &:first-child{
+                margin-left: 0;
+            }
+            img{
+                width: 100%;
+                height: auto;
+            }
+        }
+
+    }
+</style>
 <style lang="less" scoped>
     @import "../common/style/variable.less";
     #home{
@@ -131,45 +259,71 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
-        #nav-wrapper{
+
+        #tab-wrapper{
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+        }
+        .section{
+            flex: 1;
+            height: 100%;
             display: flex;
-            align-items: center;
-            border-bottom: 1px solid #ddd;
-            #nav-list{
+            flex-direction: column;
+            #scroll-wrapper{
                 flex: 1;
-                white-space: nowrap;
-                overflow-x: auto;
-                display: flex;
-                padding: 1rem 1rem 0 1rem;
-                font-size: 1.2rem;
+                overflow: auto;
+                position: relative;
                 &::-webkit-scrollbar{
                     display: none;
                 }
-                .nav-item{
-                    list-style: none;
-                    margin:0 0.5rem;
-                    padding-bottom: 1rem;
-                    &:first-child{
-                        margin-left: 0;
-                    }
-                    &.nav-item-active{
-                        color: @color-active;
-                        border-bottom: 2px solid @color-active;
+                .scroll-container{
+                    min-height: 100%;
+                    position: relative;
+                    .loading-box{
+                        z-index: 1;
+                        width: 100%;
+                        height: 100%;
+                        background-image: url("../assets/icon-loading.gif");
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        position: absolute;
                     }
                 }
-            }
-            .iconfont-search{
-                font-size: @iconfont-size;
-                margin: @iconfont-margin;
-            }
 
-        }
-        #section{
-            flex: 1;
-            overflow: auto;
-            transition: 1s all ease;
-            &::-webkit-scrollbar{
-                display: none;
+            }
+            #nav-wrapper{
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                #nav-list{
+                    flex: 1;
+                    white-space: nowrap;
+                    overflow-x: auto;
+                    display: flex;
+                    padding: 1rem 1rem 0 1rem;
+                    font-size: 1.2rem;
+                    &::-webkit-scrollbar{
+                        display: none;
+                    }
+                    .nav-item{
+                        list-style: none;
+                        margin:0 0.5rem;
+                        padding-bottom: 1rem;
+                        &:first-child{
+                            margin-left: 0;
+                        }
+                        &.nav-item-active{
+                            color: @color-active;
+                            border-bottom: 2px solid @color-active;
+                        }
+                    }
+                }
+                .iconfont-search{
+                    font-size: @iconfont-size;
+                    margin: @iconfont-margin;
+                }
+
             }
             #articles{
                 display: flex;
@@ -183,6 +337,10 @@
                         -webkit-box-orient: vertical;
                         -webkit-line-clamp: 2;
                         overflow: hidden;
+                    }
+                    .img-wrapper{
+                        display: flex;
+                        padding-top: 1rem;
                     }
                     .footer-wrapper{
                         font-size: @article-footer-font-size;

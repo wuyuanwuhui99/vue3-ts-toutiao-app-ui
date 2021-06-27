@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconfont-play:before {
+  content: "\e701";
+}
+
 .iconfont-tab-my:before {
   content: "\e763";
 }
