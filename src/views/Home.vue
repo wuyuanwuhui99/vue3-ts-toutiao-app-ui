@@ -47,19 +47,19 @@
         </div>
 
         <ul id="footer-tab-wrapper">
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 0}" @click="bottomTabIndex = 0">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 0}" @click="tabBottom(0)">
                 <i class="iconfont iconfont-tab iconfont-tab-home"></i>
                 <span class="tab-text">首页</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 1}" @click="bottomTabIndex = 1">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 1}" @click="tabBottom(1)">
                 <i class="iconfont iconfont-tab iconfont-tab-video"></i>
                 <span class="tab-text">视频</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 2}" @click="bottomTabIndex = 2">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 2}" @click="tabBottom(2)">
                 <i class="iconfont iconfont-tab iconfont-tab-play"></i>
                 <span class="tab-text">放映厅</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 3}" @click="bottomTabIndex = 3">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 3}" @click="tabBottom(3)">
                 <i class="iconfont iconfont-tab iconfont-tab-my"></i>
                 <span class="tab-text">我的</span>
             </li>
@@ -75,6 +75,7 @@
     import {fomatTime} from "../utils/index";
     import scroll from "../components/scroll.vue";
     import BScroll from "better-scroll";
+    import userHomeEffect from "../hooks/userHomeEffect"
     export default defineComponent({
         name: 'Home',
         components:{scroll},
@@ -87,12 +88,13 @@
             let loading = false;
             let isInit = ref(false)
             const scrollWrapper = ref<HTMLElement>()
-            let bottomTabIndex = ref<Number>(0)
             let articleListParams: ArticleParamsInterface = {
                 pageNum: 1,
                 pageSize: 20,
                 channelId: "",
             }
+
+            let {getImgHtml,getImg,tabBottom,bottomTabIndex} = userHomeEffect()
 
             /**
              * @author: wuwenqiang
@@ -130,24 +132,6 @@
                 })
             }
 
-            /**
-             * @author: wuwenqiang
-             * @description: 获取图片html
-             * @date: 2020-06-27 21:29
-             */
-            const getImgHtml = (htmlStr:string,length:number,index:number) =>{
-                if (index == 3 && length > 4){
-                    return `<div class="img-num">+${length-index-1}</div>${htmlStr}`
-                }else{
-                    return htmlStr
-                }
-            }
-
-            const getImg = (article:ArticleInterface)=>{
-                if (article.type == "video")return article.img ?  [`<div class="iconfont iconfont-play"></div><img src='${article.img}'/><div class="duration">${article.duration}</div>`] : []
-                return article.content.match(/<img[^<>]+>/g) || []
-            }
-
             await getUserDataService();//获取用户信息
             await getFavoriteChannelsListService();//获取频道信息
             let {channelId,id}= favoriteChannels.value.find((item: ChannelsInterface) => item.status == 1)
@@ -175,13 +159,14 @@
                 tabChannel,
                 activeId,
                 getImg,
+                getImgHtml,
                 favoriteChannels,
                 fomatTime,
                 articleList,
                 scrollWrapper,
                 isEnd,
                 bottomTabIndex,
-                getImgHtml,
+                tabBottom,
                 isInit
             }
         }

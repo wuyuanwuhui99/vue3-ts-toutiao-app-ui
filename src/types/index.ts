@@ -58,6 +58,36 @@ export interface ArticleParamsInterface {
     type?:string
 }
 
+export interface VideoInterface {
+    id:number, //主键,
+    albumId:string,//视频id,
+    title:string,//电影名称,
+    director:string,//导演,
+    star:string,//主演,
+    type:string,//类型,
+    countryLanguage: string,//国家/语言,
+    publishTime:string,//上映时间,
+    plot:string,//剧情,
+    isRecommend:string //是否推荐，0:不推荐，1:推荐,
+    classify:string ,//分类 电影,电视剧,动漫,综艺,新片库,福利,午夜,恐怖,其他,
+    sourceName: string,//来源名称，本地，骑士影院，爱奇艺,
+    sourceUrl:string,//来源地址,
+    label:string,//标签,
+    originaHref: string,//源地址,
+    description :string,//简单描述,
+    targetHref:string,//链接地址,
+    status:string,//0代表未使用，1表示正在使用，是banner和carousel图的才有,
+    score: string,//评分,
+    category:string,//类目，值为banner首屏，carousel：滚动轮播,
+    ranks:string,//排名,
+    userId:string,//用户名，这这个表不需要，为了跟记录叫和收藏表的结构一致,
+    duration:string,//时长,
+    img:string,// 图片地址,
+    createTime:string,//创建时间,
+    updateTime:string//更新时间,
+}
+
+
 
 
 
