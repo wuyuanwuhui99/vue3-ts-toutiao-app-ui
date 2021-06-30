@@ -3,18 +3,51 @@
 
         <div id="tab-wrapper">
             <div class="section"  v-show="bottomTabIndex == 0">
-                <div id="nav-wrapper">
-                    <ul id="nav-list">
-                        <li class="nav-item" @click="tabChannel(item)" :class="{'nav-item-active':activeId == item.id}" v-for="item,index in favoriteChannels" :key="'nav-item'+index">
+                <div class="nav-wrapper">
+                    <ul class="nav-list">
+                        <li class="nav-item" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
                     <i class="iconfont iconfont-search"></i>
                 </div>
-                <div ref="scrollWrapper" id="scroll-wrapper">
+                <div ref="articleScrollWrapper" id="scroll-wrapper">
                     <div class="scroll-container">
                         <div class="loading-box" v-if="!isInit"></div>
-                        <ul id="articles" ref="articles">
+                        <ul class="articles">
+                            <li class="article-item" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
+                                <p class="title">{{item.title}}</p>
+                                <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
+                                    <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
+                                </div>
+                                <div class="footer-wrapper">
+                                    <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
+                                    <a class="footer-item">{{item.userId}}</a>
+                                    <time class="footer-item">{{fomatTime(item.createTime)}}</time>
+                                </div>
+                            </li>
+                        </ul>
+                        <template v-if="articleState.list.length>0">
+                            <div class="loading-tip" v-if="articleState.isEnd">已经到底了</div>
+                            <div class="icon-loading" v-else></div>
+                        </template>
+                    </div>
+
+                </div>
+            </div>
+            <div class="section" v-show="bottomTabIndex == 1">
+                <div class="nav-wrapper">
+                    <ul class="nav-list">
+                        <li class="nav-item"  :class="{'nav-item-active':videoState.activeCategory == item.category}" v-for="item,index in videoState.categories" :key="'nav-item'+index">
+                            {{item.category}}
+                        </li>
+                    </ul>
+                    <i class="iconfont iconfont-search"></i>
+                </div>
+                <div ref="videoScrollWrapper" class="scroll-wrapper">
+                    <div class="scroll-container">
+                        <div class="loading-box" v-if="!isInit"></div>
+                        <ul class="articles">
                             <li class="article-item" :key="'article-item'+index+activeId" v-for="item,index in articleList">
                                 <p class="title">{{item.title}}</p>
                                 <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
@@ -27,16 +60,12 @@
                                 </div>
                             </li>
                         </ul>
-                        <template v-if="articleList.length>0">
+                        <template v-if="articleState.list.length>0">
                             <div class="loading-tip" v-if="isEnd">已经到底了</div>
                             <div class="icon-loading" v-else></div>
                         </template>
                     </div>
-
                 </div>
-            </div>
-            <div class="section" v-show="bottomTabIndex == 1">
-
             </div>
             <div class="section" v-show="bottomTabIndex == 2">
 
@@ -68,106 +97,17 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,reactive,ref,nextTick} from 'vue'
-    import {getUserDataService, getFavoriteChannelsListService, getArticleListService} from "../service/homeService";
-    import mapGetters from "../store/mapGetters";
-    import {ArticleParamsInterface, ChannelsInterface, ArticleInterface} from "../types";
-    import {fomatTime} from "../utils/index";
+    import {defineComponent,toRefs} from 'vue'
     import scroll from "../components/scroll.vue";
-    import BScroll from "better-scroll";
     import userHomeEffect from "../hooks/userHomeEffect"
     export default defineComponent({
         name: 'Home',
         components:{scroll},
         async setup() {
-            let {favoriteChannels} = mapGetters(["favoriteChannels"]);
-            let activeId = ref("")
-            let articleList = reactive<Array<ArticleInterface>>([])
-            let bscroll: BScroll;
-            let isEnd = false;
-            let loading = false;
-            let isInit = ref(false)
-            const scrollWrapper = ref<HTMLElement>()
-            let articleListParams: ArticleParamsInterface = {
-                pageNum: 1,
-                pageSize: 20,
-                channelId: "",
-            }
-
-            let {getImgHtml,getImg,tabBottom,bottomTabIndex} = userHomeEffect()
-
-            /**
-             * @author: wuwenqiang
-             * @description: 切换频道
-             * @date: 2020-06-27 21:29
-             */
-            const tabChannel = (channelItem:ChannelsInterface) => {
-                activeId.value = channelItem.id
-                articleListParams = {
-                    pageNum: 1,
-                    pageSize: 20,
-                    channelId: channelItem.channelId,
-                }
-                isEnd = false
-                articleList.splice(0,articleList.length)
-                if(channelItem.channelName == "西瓜视频")articleListParams.type = "video"
-                loadMore()
-            }
-
-            /**
-             * @author: wuwenqiang
-             * @description: 加载数据
-             * @date: 2020-06-27 21:29
-             */
-            const loadMore = async () => {
-                if (isEnd || loading) return;
-                loading = true
-                let reuslt = await getArticleListService(articleListParams).finally(()=>{loading=false})
-                if (reuslt.length == 0) {
-                    isEnd = true
-                }
-                articleList.push(...reuslt as Array<ArticleInterface>)
-                nextTick(() => {
-                    bscroll.refresh()
-                })
-            }
-
-            await getUserDataService();//获取用户信息
-            await getFavoriteChannelsListService();//获取频道信息
-            let {channelId,id}= favoriteChannels.value.find((item: ChannelsInterface) => item.status == 1)
-            articleListParams.channelId = channelId;
-            activeId.value = id
-            let reuslt = await getArticleListService(articleListParams).finally(()=>{
-                isInit.value = true
-            })
-            articleList.push(...reuslt as Array<ArticleInterface>)
-
-            setTimeout(()=>{
-                bscroll = new BScroll(scrollWrapper.value, {
-                    probeType: 1,
-                    click: true,
-                });
-                bscroll.on('scrollEnd', () => {
-                    if (bscroll.y <= (bscroll.maxScrollY + 100) && !isEnd && !loading) {
-                        articleListParams.pageNum++
-                        loadMore()
-                    }
-                })
-            },100)
-
+            let state = userHomeEffect()
+            state.userInitEffect()
             return {
-                tabChannel,
-                activeId,
-                getImg,
-                getImgHtml,
-                favoriteChannels,
-                fomatTime,
-                articleList,
-                scrollWrapper,
-                isEnd,
-                bottomTabIndex,
-                tabBottom,
-                isInit
+                ...toRefs(state)
             }
         }
     })
@@ -255,7 +195,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            #scroll-wrapper{
+            .scroll-wrapper{
                 flex: 1;
                 overflow: auto;
                 position: relative;
@@ -277,11 +217,11 @@
                 }
 
             }
-            #nav-wrapper{
+            .nav-wrapper{
                 display: flex;
                 align-items: center;
                 border-bottom: 1px solid #ddd;
-                #nav-list{
+                .nav-list{
                     flex: 1;
                     white-space: nowrap;
                     overflow-x: auto;
@@ -310,7 +250,7 @@
                 }
 
             }
-            #articles{
+            .articles{
                 display: flex;
                 flex-direction: column;
                 .article-item{

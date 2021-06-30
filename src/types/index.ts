@@ -58,6 +58,16 @@ export interface ArticleParamsInterface {
     type?:string
 }
 
+export interface ArticleStateInterface {
+    isInit: boolean,
+    activeId:number,
+    isEnd: boolean,
+    loading:boolean,
+    params:ArticleParamsInterface,
+    channels:Array<ChannelsInterface>,
+    list:Array<ArticleInterface>,
+}
+
 export interface VideoInterface {
     id:number, //主键,
     albumId:string,//视频id,
@@ -87,6 +97,30 @@ export interface VideoInterface {
     updateTime:string//更新时间,
 }
 
+export interface VideoParamsInterface {
+    pageSize:number,//每页显示条数
+    pageNum:number,//页码
+    star?:string,//主演
+    category?:string,//分类
+    type?:string,//类型
+    label?:string,//标签
+    userId?:string,//用户
+    keyword?:string,//关键字
+}
+
+export interface VideoCategoryInterface {
+    category:string
+}
+
+export interface VideoStateInterface {
+    isInit: boolean,
+    activeCategory:string,
+    isEnd: boolean,
+    loading:boolean,
+    params: VideoParamsInterface,
+    categories:Array<VideoCategoryInterface>,
+    list:Array<VideoInterface>,
+}
 
 
 

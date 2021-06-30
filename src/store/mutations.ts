@@ -9,7 +9,4 @@ export default {
     [types.USER_DATA](state: stateInterface, userData: UserDataInterface): void {
         state.userData = userData
     },
-    [types.FAVORITE_CHANNELS](state: stateInterface, favoriteChannels: Array<ChannelsInterface>): void {
-        state.favoriteChannels = favoriteChannels
-    }
 }

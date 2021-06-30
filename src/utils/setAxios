@@ -17,7 +17,7 @@ axios.interceptors.response.use((res)=> {
         store.commit(TOKEN, res.data.token)
         localStorage.setItem("token",res.data.token);
     }
-    return res.data;
+    return res.data.data;
 },err => {
     // 在请求错误时要做的事儿
     // 该返回的数据则是axios.catch(err)中接收的数据

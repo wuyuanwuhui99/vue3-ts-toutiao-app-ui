@@ -1,24 +1,31 @@
 import axios from "axios";
 import api from "../api";
 import store from "../store"
-import {ArticleInterface,ChannelsInterface,UserDataInterface,ArticleParamsInterface} from "../types";
-import {USER_DATA, FAVORITE_CHANNELS} from "../store/mutation-types"
+import {UserDataInterface,ArticleParamsInterface,VideoParamsInterface} from "../types";
+import {USER_DATA} from "../store/mutation-types"
 
 export const getUserDataService = async () => {
-    let {data} = await axios.get(api.getUserData)
+    let data =  await axios.get(api.getUserData)
     store.commit(USER_DATA, data as UserDataInterface)
 }
 
 export const getFavoriteChannelsListService = async () => {
-    let {data} = await axios.get(api.getFavoriteChannels)
-    store.commit(FAVORITE_CHANNELS, data as Array<ChannelsInterface>)
+    return axios.get(api.getFavoriteChannels)
 }
 
-export const getArticleListService = async (params:ArticleParamsInterface) => {
-    return new Promise(async (resolve) => {
-        let {data} = await axios.get(api.getArticleList, {
-            params
-        })
-        resolve(data)
+export const getArticleListService = (params:ArticleParamsInterface) => {
+    return axios.get(api.getArticleList, {
+        params
     })
 }
+
+export const getVideoCategoryService = ()=>{
+    return axios.get(api.getVideoCategory)
+}
+
+export const getVideoListService = (params:VideoParamsInterface) => {
+    return axios.get(api.getVideoList, {
+        params
+    })
+}
+
