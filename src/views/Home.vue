@@ -5,17 +5,17 @@
             <div class="section"  v-show="bottomTabIndex == 0">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
+                        <li class="nav-item" @click="tabChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
                     <i class="iconfont iconfont-search"></i>
                 </div>
-                <div ref="articleScrollWrapper" id="scroll-wrapper">
+                <div ref="articleScrollWrapper" class="scroll-wrapper">
                     <div class="scroll-container">
                         <div class="loading-box" v-if="!isInit"></div>
                         <ul class="articles">
-                            <li class="article-item" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
+                            <li class="article-item" @click="tabChannel(item)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
                                 <p class="title">{{item.title}}</p>
                                 <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
                                     <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
@@ -100,13 +100,14 @@
     import {defineComponent,toRefs} from 'vue'
     import scroll from "../components/scroll.vue";
     import userHomeEffect from "../hooks/userHomeEffect"
+    import {fomatTime} from "../utils";
     export default defineComponent({
         name: 'Home',
         components:{scroll},
         async setup() {
             let state = userHomeEffect()
-            state.userInitEffect()
             return {
+                fomatTime,
                 ...toRefs(state)
             }
         }

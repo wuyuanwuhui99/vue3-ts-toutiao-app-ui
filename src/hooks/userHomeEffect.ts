@@ -4,7 +4,7 @@ import {
     VideoInterface,
     ArticleStateInterface,
     VideoCategoryInterface,
-    VideoStateInterface, ChannelsInterface,
+    VideoStateInterface, ChannelsInterface, NavInterface,
 } from "@/types";
 import {
     getVideoListService,
@@ -25,8 +25,9 @@ export default ()=> {
             pageSize: 20,
             channelId: "",
         },
-        favoriteChannelList:[],
-        articleList:[]
+        channels:[],
+        list:[],
+        bscroll:null
     });
     
     const videoState = reactive<VideoStateInterface>({
@@ -46,6 +47,7 @@ export default ()=> {
         },
         categories:[],
         list:[],
+        bscroll:null
     })
     
     let bottomTabIndex = ref<number>(0)
@@ -83,28 +85,7 @@ export default ()=> {
     const tabBottom = async (index:number)=>{
         bottomTabIndex.value = index;
         if(index == 1 && !videoState.isInit){//获取视频分类和列表
-            let res = await getVideoCategoryService()
-            videoState.categories.push(...res as Array<VideoCategoryInterface>)
-            videoState.params.category = videoState.categories[0].category
-            let result = await getVideoListService(videoState.params)
-            videoState.list.push(...result as Array<VideoInterface>)
-            videoState.isInit = true
-            setTimeout(()=>{
-                const bscroll:BScroll = new BScroll(videoScrollWrapper.value, {
-                    probeType: 1,
-                    click: true,
-                });
-                bscroll.on('scrollEnd', async () => {
-                    if (bscroll.y <= (bscroll.maxScrollY + 100) && !videoState.isEnd && !videoState.loading) {
-                        videoState.params.pageNum++
-                        let result:Array<VideoInterface> = await getVideoListService(videoState.params)
-                        videoState.list.push(...result)
-                        nextTick(() => {
-                            bscroll.refresh()
-                        })
-                    }
-                })
-            },100)
+            userInitVideoEffect()
         }
     }
     
@@ -113,25 +94,74 @@ export default ()=> {
      * @description: 切换频道
      * @date: 2020-06-27 21:29
      */
-    // const tabChannel = (channelItem:ChannelsInterface) => {
-    //     activeId.value = channelItem.id
-    //     articleListParams = {
-    //         pageNum: 1,
-    //         pageSize: 20,
-    //         channelId: channelItem.channelId,
-    //     }
-    //     isEnd = false
-    //     articleList.splice(0,articleList.length)
-    //     if(channelItem.channelName == "西瓜视频")articleListParams.type = "video"
-    //     loadMore()
-    // }
+    const tabChannel = async (navItem: NavInterface) => {
+        if (bottomTabIndex.value == 0) {
+            articleState.activeId = navItem.id
+            articleState.params = {
+                pageNum: 1,
+                pageSize: 20,
+                channelId: navItem.channelId,
+            }
+            articleState.isEnd = false;
+            articleState.list.splice(0, articleState.list.length)
+            if (navItem.channelName == "西瓜视频") articleState.params.type = "video"
+            let res = await getArticleListService(articleState.params)
+            articleState.list.push(...res as Array<ArticleInterface>)
+            nextTick(()=>{
+                articleState.bscroll.refresh()
+            })
+        } else if(bottomTabIndex.value == 1){
+            videoState.params = {
+                pageNum: 1,
+                pageSize: 20,
+                category: navItem.category,
+            }
+            videoState.isEnd = false;
+            videoState.list.splice(0, videoState.list.length)
+            let res = await getVideoListService(articleState.params)
+            videoState.list.push(...res as Array<VideoInterface>)
+            nextTick(()=>{
+                videoState.bscroll.refresh()
+            })
+        }
+    }
+    
+    /**
+     * @author: wuwenqiang
+     * @description: 初始化视频方法
+     * @date: 2020-07-02 00:11
+     */
+    const userInitVideoEffect = async ()=>{
+        let res = await getVideoCategoryService()
+        videoState.categories.push(...res as Array<VideoCategoryInterface>)
+        videoState.params.category = videoState.categories[0].category
+        let result = await getVideoListService(videoState.params)
+        videoState.list.push(...result as Array<VideoInterface>)
+        videoState.isInit = true
+        setTimeout(()=>{
+            videoState.bscroll = new BScroll(videoScrollWrapper.value, {
+                probeType: 1,
+                click: true,
+            });
+            videoState.bscroll.on('scrollEnd', async () => {
+                if (videoState.bscroll.y <= (videoState.bscroll.maxScrollY + 100) && !videoState.isEnd && !videoState.loading) {
+                    videoState.params.pageNum++
+                    let result:Array<VideoInterface> = await getVideoListService(videoState.params)
+                    videoState.list.push(...result)
+                    nextTick(() => {
+                        videoState.bscroll.refresh()
+                    })
+                }
+            })
+        },100)
+    }
     
     /**
      * @author: wuwenqiang
      * @description: 初始化方法
      * @date: 2020-06-30 23:28
      */
-    const userInitEffect = async ()=>{
+    const userInitArticleEffect = async ()=>{
         await getUserDataService();//获取用户信息
         const res:Array<ChannelsInterface> = await getFavoriteChannelsListService();//获取频道信息
         articleState.channels.push(...res)
@@ -142,14 +172,13 @@ export default ()=> {
             articleState.isInit = true
         })
         articleState.list.push(...reuslt)
-        
         setTimeout(()=>{
-            const bscroll:BScroll = new BScroll(articleScrollWrapper.value, {
+            articleState.bscroll = new BScroll(articleScrollWrapper.value, {
                 probeType: 1,
                 click: true,
             });
-            bscroll.on('scrollEnd', async () => {
-                if (bscroll.y <= (bscroll.maxScrollY + 100) && !articleState.isEnd && !articleState.loading) {
+            articleState.bscroll.on('scrollEnd', async () => {
+                if (articleState.bscroll.y <= (articleState.bscroll.maxScrollY + 100) && !articleState.isEnd && !articleState.loading) {
                     articleState.params.pageNum++
                     let reuslt:Array<ArticleInterface> = await getArticleListService(articleState.params).finally(()=>{
                         articleState.isInit = true
@@ -162,21 +191,23 @@ export default ()=> {
                     }
                     articleState.list.push(...reuslt)
                     nextTick(() => {
-                        bscroll.refresh()
+                        articleState.bscroll.refresh()
                     })
                 }
             })
-        },100)
+        },500)
     }
+    
+    userInitArticleEffect()
     
     return {
         getImgHtml,
         getImg,
         bottomTabIndex,
         tabBottom,
-        userInitEffect,
         articleState,
         videoState,
+        tabChannel,
         articleScrollWrapper,
         videoScrollWrapper
         

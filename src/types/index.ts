@@ -66,6 +66,7 @@ export interface ArticleStateInterface {
     params:ArticleParamsInterface,
     channels:Array<ChannelsInterface>,
     list:Array<ArticleInterface>,
+    bscroll:any
 }
 
 export interface VideoInterface {
@@ -112,6 +113,8 @@ export interface VideoCategoryInterface {
     category:string
 }
 
+export type NavInterface = VideoCategoryInterface | ChannelsInterface
+
 export interface VideoStateInterface {
     isInit: boolean,
     activeCategory:string,
@@ -120,6 +123,7 @@ export interface VideoStateInterface {
     params: VideoParamsInterface,
     categories:Array<VideoCategoryInterface>,
     list:Array<VideoInterface>,
+    bscroll:any
 }
 
 
