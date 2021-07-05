@@ -102,26 +102,33 @@ export interface VideoParamsInterface {
     pageSize:number,//每页显示条数
     pageNum:number,//页码
     star?:string,//主演
-    category?:string,//分类
+    channelId?:string,//分类
     type?:string,//类型
     label?:string,//标签
     userId?:string,//用户
     keyword?:string,//关键字
 }
 
-export interface VideoCategoryInterface {
-    category:string
+export interface VideoChannelInterface {
+    id:number,
+    channelName:string,
+    channelId:string,
+    createTime:string,
+    updateTime:string,
+    sequence:number,
+    status:number,
+    userId:string
 }
 
-export type NavInterface = VideoCategoryInterface | ChannelsInterface
+export type NavInterface = VideoChannelInterface | ChannelsInterface
 
 export interface VideoStateInterface {
     isInit: boolean,
-    activeCategory:string,
+    activeChannelId:string,
     isEnd: boolean,
     loading:boolean,
     params: VideoParamsInterface,
-    categories:Array<VideoCategoryInterface>,
+    channels:Array<VideoChannelInterface>,
     list:Array<VideoInterface>,
     bscroll:any
 }

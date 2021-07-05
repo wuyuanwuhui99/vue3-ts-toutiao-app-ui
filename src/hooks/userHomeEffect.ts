@@ -3,12 +3,12 @@ import {
     ArticleInterface,
     VideoInterface,
     ArticleStateInterface,
-    VideoCategoryInterface,
+    VideoChannelInterface,
     VideoStateInterface, ChannelsInterface, NavInterface,
 } from "@/types";
 import {
     getVideoListService,
-    getVideoCategoryService,
+    getVideoFavoriteChannelsService,
     getUserDataService,
     getFavoriteChannelsListService, getArticleListService
 } from "../service/homeService"
@@ -32,20 +32,20 @@ export default ()=> {
     
     const videoState = reactive<VideoStateInterface>({
         isInit: false,
-        activeCategory:"",
+        activeChannelId:"",
         isEnd: false,
         loading:false,
         params: {
             pageSize:20,
             pageNum:1,//页码
             star:"",//主演
-            category:"",//分类
+            channelId:"",//分类
             type:"",//类型
             label:"",//标签
             userId:"",//用户
             keyword:"",//关键字
         },
-        categories:[],
+        channels:[],
         list:[],
         bscroll:null
     })
@@ -76,6 +76,7 @@ export default ()=> {
         if (article.type == "video")return article.img ?  [`<div class="iconfont iconfont-play"></div><img src='${article.img}'/><div class="duration">${article.duration}</div>`] : []
         return article.content.match(/<img[^<>]+>/g) || []
     }
+    
     
     /**
      * @author: wuwenqiang
@@ -114,7 +115,7 @@ export default ()=> {
             videoState.params = {
                 pageNum: 1,
                 pageSize: 20,
-                category: navItem.category,
+                channelId: navItem.channelId,
             }
             videoState.isEnd = false;
             videoState.list.splice(0, videoState.list.length)
@@ -132,12 +133,14 @@ export default ()=> {
      * @date: 2020-07-02 00:11
      */
     const userInitVideoEffect = async ()=>{
-        let res = await getVideoCategoryService()
-        videoState.categories.push(...res as Array<VideoCategoryInterface>)
-        videoState.params.category = videoState.categories[0].category
+        let res = await getVideoFavoriteChannelsService()
+        videoState.channels.push(...res as Array<VideoChannelInterface>)
+        videoState.params.channelId = videoState.channels[0].channelId
         let result = await getVideoListService(videoState.params)
         videoState.list.push(...result as Array<VideoInterface>)
         videoState.isInit = true
+        videoState.loading = false
+        videoState.activeChannelId = videoState.channels[0].channelId
         setTimeout(()=>{
             videoState.bscroll = new BScroll(videoScrollWrapper.value, {
                 probeType: 1,
@@ -180,7 +183,7 @@ export default ()=> {
             articleState.bscroll.on('scrollEnd', async () => {
                 if (articleState.bscroll.y <= (articleState.bscroll.maxScrollY + 100) && !articleState.isEnd && !articleState.loading) {
                     articleState.params.pageNum++
-                    let reuslt:Array<ArticleInterface> = await getArticleListService(articleState.params).finally(()=>{
+                    let result = await getArticleListService(articleState.params).finally(()=>{
                         articleState.isInit = true
                     })
                     if(result.length == 0){

@@ -19,8 +19,8 @@ export const getArticleListService = (params:ArticleParamsInterface) => {
     })
 }
 
-export const getVideoCategoryService = ()=>{
-    return axios.get(api.getVideoCategory)
+export const getVideoFavoriteChannelsService = ()=>{
+    return axios.get(api.getVideoFavoriteChannels)
 }
 
 export const getVideoListService = (params:VideoParamsInterface) => {

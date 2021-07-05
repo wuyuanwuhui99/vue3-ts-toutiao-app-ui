@@ -38,29 +38,28 @@
             <div class="section" v-show="bottomTabIndex == 1">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item"  :class="{'nav-item-active':videoState.activeCategory == item.category}" v-for="item,index in videoState.categories" :key="'nav-item'+index">
-                            {{item.category}}
+                        <li class="nav-item"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item'+index">
+                            {{item.channelName}}
                         </li>
                     </ul>
                     <i class="iconfont iconfont-search"></i>
                 </div>
                 <div ref="videoScrollWrapper" class="scroll-wrapper">
                     <div class="scroll-container">
-                        <div class="loading-box" v-if="!isInit"></div>
+                        <div class="loading-box" v-if="!videoState.isInit"></div>
                         <ul class="articles">
-                            <li class="article-item" :key="'article-item'+index+activeId" v-for="item,index in articleList">
-                                <p class="title">{{item.title}}</p>
-                                <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
-                                    <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
+                            <li v-for="item,index in videoState.list" class="article-item" :key="'video-item'+index">
+                                <div class="user-wrapper">
+                                    <img class="avater" scr="https://p3.bdxiguaimg.com/img/user-avatar/b5fa6dbfffa681d61401bf869dcf9d29~tplv-xg-center-qs:88:88:q75.webp"/>
+                                    <div class="video-title-wrapper">
+                                        <div class="main-title">{{item.title}}</div>
+                                        <div class="sub-title"></div>
+                                    </div>
                                 </div>
-                                <div class="footer-wrapper">
-                                    <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
-                                    <a class="footer-item">{{item.userId}}</a>
-                                    <time class="footer-item">{{fomatTime(item.createTime)}}</time>
-                                </div>
+
                             </li>
                         </ul>
-                        <template v-if="articleState.list.length>0">
+                        <template v-if="videoState.list.length>0">
                             <div class="loading-tip" v-if="isEnd">已经到底了</div>
                             <div class="icon-loading" v-else></div>
                         </template>
@@ -98,12 +97,10 @@
 
 <script lang="ts">
     import {defineComponent,toRefs} from 'vue'
-    import scroll from "../components/scroll.vue";
     import userHomeEffect from "../hooks/userHomeEffect"
     import {fomatTime} from "../utils";
     export default defineComponent({
         name: 'Home',
-        components:{scroll},
         async setup() {
             let state = userHomeEffect()
             return {
@@ -257,6 +254,17 @@
                 .article-item{
                     padding: 1rem;
                     border-bottom: 1px solid @border-color;
+                    .user-wrapper{
+                        display: flex;
+                        .avater{
+                            width: 3rem;
+                            height: 3rem;
+                            border-radius: 50%;
+                        }
+                        .video-title-wrapper{
+                            flex: 1;
+                        }
+                    }
                     .title{
                         font-size: @article-title-font-size;
                         display: -webkit-box;
