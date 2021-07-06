@@ -72,6 +72,7 @@ export interface ArticleStateInterface {
 export interface VideoInterface {
     id:number, //主键,
     albumId:string,//视频id,
+    channelId:string,//频道id,
     title:string,//电影名称,
     director:string,//导演,
     star:string,//主演,
@@ -96,6 +97,20 @@ export interface VideoInterface {
     img:string,// 图片地址,
     createTime:string,//创建时间,
     updateTime:string//更新时间,
+    user:UserInfo,//用户信息
+}
+
+export interface UserInfo {
+    id:number,//主键
+    userId:string,//用户id
+    name:string,//名称
+    authorDesc:string,//描述
+    avatarUrl:string,//头像地址
+    description:string,//描述
+    followersCount:string,//粉丝数量
+    verifiedContent:string,//主要内容
+    createTime:string,//创建时间
+    updateTime:string,//更新时间
 }
 
 export interface VideoParamsInterface {

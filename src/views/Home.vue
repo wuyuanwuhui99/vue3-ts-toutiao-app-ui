@@ -50,13 +50,15 @@
                         <ul class="articles">
                             <li v-for="item,index in videoState.list" class="article-item" :key="'video-item'+index">
                                 <div class="user-wrapper">
-                                    <img class="avater" scr="https://p3.bdxiguaimg.com/img/user-avatar/b5fa6dbfffa681d61401bf869dcf9d29~tplv-xg-center-qs:88:88:q75.webp"/>
+                                    <img class="avater" :src="item.user.avatarUrl"/>
                                     <div class="video-title-wrapper">
                                         <div class="main-title">{{item.title}}</div>
                                         <div class="sub-title"></div>
                                     </div>
                                 </div>
-
+                                <div class="video-img-wrapper">
+                                    <img :src="item.img" class="video-img">
+                                </div>
                             </li>
                         </ul>
                         <template v-if="videoState.list.length>0">
@@ -256,6 +258,7 @@
                     border-bottom: 1px solid @border-color;
                     .user-wrapper{
                         display: flex;
+                        padding-bottom: 1rem;
                         .avater{
                             width: 3rem;
                             height: 3rem;
@@ -263,6 +266,13 @@
                         }
                         .video-title-wrapper{
                             flex: 1;
+                            padding-left: 1rem;
+                        }
+                    }
+                    .video-img-wrapper{
+                        position: relative;
+                        .video-img{
+                            width: 100%;
                         }
                     }
                     .title{
