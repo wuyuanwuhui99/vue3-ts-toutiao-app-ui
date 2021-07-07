@@ -35,7 +35,7 @@ export interface ArticleInterface {
     ranks:string//排名
 }
 
-export interface ChannelsInterface {
+export interface ArticleChannelInterface {
     id:number,//主键
     channelId:string,//频道id
     channelName:string,//频道名称
@@ -134,8 +134,6 @@ export interface VideoChannelInterface {
     status:number,
     userId:string
 }
-
-export type NavInterface = VideoChannelInterface | ChannelsInterface
 
 export interface VideoStateInterface {
     isInit: boolean,

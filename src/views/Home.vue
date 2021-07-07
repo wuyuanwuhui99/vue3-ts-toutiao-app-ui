@@ -5,7 +5,7 @@
             <div class="section"  v-show="bottomTabIndex == 0">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item" @click="tabChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
+                        <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
@@ -15,7 +15,7 @@
                     <div class="scroll-container">
                         <div class="loading-box" v-if="!isInit"></div>
                         <ul class="articles">
-                            <li class="article-item" @click="tabChannel(item)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
+                            <li class="article-item" @click="tabArticleChannel(item)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
                                 <p class="title">{{item.title}}</p>
                                 <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
                                     <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
@@ -38,7 +38,7 @@
             <div class="section" v-show="bottomTabIndex == 1">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item'+index">
+                        <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
@@ -52,8 +52,9 @@
                                 <div class="user-wrapper">
                                     <img class="avater" :src="item.user.avatarUrl"/>
                                     <div class="video-title-wrapper">
+                                        <div class="sub-title">{{item.user.authorDesc}}</div>
                                         <div class="main-title">{{item.title}}</div>
-                                        <div class="sub-title"></div>
+
                                     </div>
                                 </div>
                                 <div class="video-img-wrapper">
@@ -77,19 +78,19 @@
         </div>
 
         <ul id="footer-tab-wrapper">
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 0}" @click="tabBottom(0)">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 0}" @click="tabBottomNav(0)">
                 <i class="iconfont iconfont-tab iconfont-tab-home"></i>
                 <span class="tab-text">首页</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 1}" @click="tabBottom(1)">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 1}" @click="tabBottomNav(1)">
                 <i class="iconfont iconfont-tab iconfont-tab-video"></i>
                 <span class="tab-text">视频</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 2}" @click="tabBottom(2)">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 2}" @click="tabBottomNav(2)">
                 <i class="iconfont iconfont-tab iconfont-tab-play"></i>
                 <span class="tab-text">放映厅</span>
             </li>
-            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 3}" @click="tabBottom(3)">
+            <li class="footer-tab-item" :class="{'footer-tab-item-active':bottomTabIndex == 3}" @click="tabBottomNav(3)">
                 <i class="iconfont iconfont-tab iconfont-tab-my"></i>
                 <span class="tab-text">我的</span>
             </li>
@@ -98,16 +99,43 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,toRefs} from 'vue'
-    import userHomeEffect from "../hooks/userHomeEffect"
+    import {defineComponent,toRefs,ref} from 'vue'
+    import useArticleEffect from "../hooks/useArticleEffect"
     import {fomatTime} from "../utils";
+    import useVideoEffect from "../hooks/useVideoEffect"
     export default defineComponent({
         name: 'Home',
         async setup() {
-            let state = userHomeEffect()
+            let bottomTabIndex = ref(0)
+            const {getImgHtml,getImg,articleState,tabArticleChannel,articleScrollWrapper,useInitArticleEffect} = useArticleEffect()
+            const {videoState,tabVideoChannel,videoScrollWrapper,useInitVideoEffect} = useVideoEffect();
+
+            /**
+             * @author: wuwenqiang
+             * @description: 底部切换
+             * @date: 2020-06-30 23:28
+             */
+            const tabBottomNav = async (index:number)=>{
+                bottomTabIndex.value = index;
+                if(index == 1 && !videoState.isInit){//获取视频分类和列表
+                    useInitVideoEffect()
+                }
+            }
+
+            await useInitArticleEffect()
+
             return {
+                tabBottomNav,
                 fomatTime,
-                ...toRefs(state)
+                getImgHtml,
+                getImg,
+                articleState,
+                tabArticleChannel,
+                articleScrollWrapper,
+                videoState,
+                tabVideoChannel,
+                videoScrollWrapper,
+                bottomTabIndex
             }
         }
     })
@@ -266,7 +294,20 @@
                         }
                         .video-title-wrapper{
                             flex: 1;
-                            padding-left: 1rem;
+                            margin-left: 1rem;
+                            max-width: calc(100% - 4rem);
+                            .sub-title{
+                                color:@color-icon;
+                                font-size: @article-footer-font-size;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                padding-bottom: 0.5rem;
+                                width: 100%;
+                            }
+                            .main-title{
+                                width: 100%;
+                            }
                         }
                     }
                     .video-img-wrapper{
