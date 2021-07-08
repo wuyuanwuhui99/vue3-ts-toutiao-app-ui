@@ -5,7 +5,7 @@
             <div class="section"  v-show="bottomTabIndex == 0">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item'+index">
+                        <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item-article'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
@@ -38,7 +38,7 @@
             <div class="section" v-show="bottomTabIndex == 1">
                 <div class="nav-wrapper">
                     <ul class="nav-list">
-                        <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item'+index">
+                        <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item-video'+index">
                             {{item.channelName}}
                         </li>
                     </ul>
@@ -70,7 +70,28 @@
                 </div>
             </div>
             <div class="section" v-show="bottomTabIndex == 2">
+                <div class="nav-wrapper">
+                    <ul class="nav-list">
+                        <li class="nav-item" @click="tabMovieChannel(item)"  :class="{'nav-item-active':movieState.activeClassify == item}" v-for="item,index in movieState.classifies" :key="'nav-item-movie'+index">
+                            {{item}}
+                        </li>
+                    </ul>
+                    <i class="iconfont iconfont-search"></i>
+                </div>
+                <div ref="videoScrollWrapper" class="scroll-wrapper">
+                    <div class="scroll-container">
+                        <div class="loading-box" v-if="!movieState.isInit"></div>
+                        <ul class="articles">
+                            <li v-for="item,index in videoState.list" class="article-item" :key="'movie-item'+index">
 
+                            </li>
+                        </ul>
+                        <template v-if="movieState.list.length>0">
+                            <div class="loading-tip" v-if="isEnd">已经到底了</div>
+                            <div class="icon-loading" v-else></div>
+                        </template>
+                    </div>
+                </div>
             </div>
             <div class="section" v-show="bottomTabIndex == 3">
 
@@ -99,16 +120,18 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,toRefs,ref} from 'vue'
-    import useArticleEffect from "../hooks/useArticleEffect"
+    import {defineComponent,ref} from 'vue';
+    import useArticleEffect from "../hooks/useArticleEffect";
     import {fomatTime} from "../utils";
-    import useVideoEffect from "../hooks/useVideoEffect"
+    import useVideoEffect from "../hooks/useVideoEffect";
+    import useMovieEffect from "../hooks/useMovieEffect";
     export default defineComponent({
         name: 'Home',
         async setup() {
             let bottomTabIndex = ref(0)
-            const {getImgHtml,getImg,articleState,tabArticleChannel,articleScrollWrapper,useInitArticleEffect} = useArticleEffect()
-            const {videoState,tabVideoChannel,videoScrollWrapper,useInitVideoEffect} = useVideoEffect();
+            const articleEffect = useArticleEffect()
+            const videoEffect = useVideoEffect();
+            const movieEffect = useMovieEffect()
 
             /**
              * @author: wuwenqiang
@@ -117,24 +140,19 @@
              */
             const tabBottomNav = async (index:number)=>{
                 bottomTabIndex.value = index;
-                if(index == 1 && !videoState.isInit){//获取视频分类和列表
-                    useInitVideoEffect()
+                if(index == 1 && !videoEffect.videoState.isInit){//获取视频分类和列表
+                    videoEffect.useInitVideoEffect()
                 }
             }
 
-            await useInitArticleEffect()
+            await articleEffect.useInitArticleEffect()
 
             return {
                 tabBottomNav,
                 fomatTime,
-                getImgHtml,
-                getImg,
-                articleState,
-                tabArticleChannel,
-                articleScrollWrapper,
-                videoState,
-                tabVideoChannel,
-                videoScrollWrapper,
+                ...articleEffect,
+                ...videoEffect,
+                ...movieEffect,
                 bottomTabIndex
             }
         }
