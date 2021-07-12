@@ -88,9 +88,10 @@
                 <div ref="videoScrollWrapper" class="scroll-wrapper">
                     <div class="scroll-container">
                         <div class="loading-box" v-if="!movieState.isInit"></div>
-                        <ul class="articles">
-                            <li v-for="item,index in videoState.list" class="article-item" :key="'movie-item'+index">
-
+                        <ul class="movie-wrapper">
+                            <li v-for="item,index in movieState.list" class="movie-item" :key="'movie-item'+index">
+                                <img class="movie-img" :src="item.img"/>
+                                <div class="movie-name">{{item.movieName}}</div>
                             </li>
                         </ul>
                         <template v-if="movieState.list.length>0">
@@ -255,6 +256,27 @@
                         background-repeat: no-repeat;
                         background-position: center center;
                         position: absolute;
+                    }
+                    .movie-wrapper{
+                        display: flex;
+                        flex-wrap: wrap;
+                        padding: 1rem;
+                        .movie-item{
+                            width: calc(50% - 0.5rem);
+                            margin-bottom: 1rem;
+                            &:nth-child(even){
+                                margin-left: 1rem;
+                            }
+                            .movie-img{
+                                width: 100%;
+                            }
+                            .movie-name{
+                                width: 100%;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+                        }
                     }
                 }
 
