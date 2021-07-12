@@ -5,4 +5,5 @@ export default {
     getArticleList: "/service/toutiao/getArticleList",//获取文章列表
     getVideoFavoriteChannels:"/service/toutiao-getway/getVideoFavoriteChannels",//获取视频分类
     getVideoList: "/service/toutiao/getVideoList",//获取视频列表
+    getMovieList: "/service/toutiao/getMovieList",//获取视频列表
 }

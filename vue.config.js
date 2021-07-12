@@ -10,6 +10,9 @@ module.exports = {
     proxy: {
       '/service': {
         target: 'http://localhost:8000',
+      },
+      '/static/movie': {
+            target: 'http://localhost:5000',
       }
     }
   }

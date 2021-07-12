@@ -7,7 +7,7 @@ import {
 import {
     getVideoListService,
     getVideoFavoriteChannelsService,
-} from "../service/homeService"
+} from "../service/videoService"
 import BScroll from "better-scroll";
 
 export default ()=> {

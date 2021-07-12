@@ -10,7 +10,8 @@ export const fomatTime=(value:any):string=>{
         return Math.ceil(diff/(60*60))+"小时前"
     }else if(diff < 60*60*24*30){
         return Math.ceil(diff/(60*60*24))+"天前"
-    }else{
-        return value
+    }else if(diff < 60*60*24*30*12){
+        return Math.ceil(diff/(60*60*24*30))+"个月前"
     }
+    return Math.ceil(diff/(60*60*24*30*12))+"年前"
 }

@@ -54,11 +54,18 @@
                                     <div class="video-title-wrapper">
                                         <div class="sub-title">{{item.user.authorDesc}}</div>
                                         <div class="main-title">{{item.title}}</div>
-
                                     </div>
                                 </div>
                                 <div class="video-img-wrapper">
                                     <img :src="item.img" class="video-img">
+                                    <i class="iconfont iconfont-play"></i>
+                                </div>
+                                <div class="video-footer">
+                                    <i class="icon-video-footer iconfont iconfont-like"></i>
+                                    <i class="icon-video-footer iconfont iconfont-comment"></i>
+                                    <i class="icon-video-footer iconfont iconfont-collection"></i>
+                                    <i class="icon-video-footer iconfont iconfont-views"></i>
+                                    <span class="video-time">{{fomatTime(item.publishTime)}}</span>
                                 </div>
                             </li>
                         </ul>
@@ -142,6 +149,8 @@
                 bottomTabIndex.value = index;
                 if(index == 1 && !videoEffect.videoState.isInit){//获取视频分类和列表
                     videoEffect.useInitVideoEffect()
+                }else if(index == 2 && !movieEffect.movieState.isInit){
+                    movieEffect.useInitMovieEffect()
                 }
             }
 
@@ -173,19 +182,6 @@
                 max-width: 100%;
                 width: 100%;
                 max-height: 20rem;
-            }
-            .iconfont-play{
-                position: absolute;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                color: #fff;
-                font-size: @article-title-font-size;
             }
             .duration{
                 position: absolute;
@@ -333,7 +329,35 @@
                         .video-img{
                             width: 100%;
                         }
+                        .iconfont-play{
+                            position: absolute;
+                            left: calc(50% - 1.5rem);
+                            top: calc(50% - 1.5rem);
+                            width: 3rem;
+                            height: 3rem;
+                            z-index: 1;
+                            font-size: @iconfont-size;
+                            text-align: center;
+                            line-height: 3rem;
+                            color: #fff;
+                            opacity: 0.8;
+                        }
                     }
+                    .video-footer{
+                        padding-top: 1rem;
+                        .icon-video-footer{
+                            font-size: 1.4rem;
+                            margin-left: 1rem;
+                            &:first-child{
+                                margin-left: 0;
+                            }
+                        }
+                        .video-time{
+                            float: right;
+                            color: @article-footer-color;
+                        }
+                    }
+
                     .title{
                         font-size: @article-title-font-size;
                         display: -webkit-box;

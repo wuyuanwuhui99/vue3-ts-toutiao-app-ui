@@ -18,14 +18,3 @@ export const getArticleListService = (params:ArticleParamsInterface) => {
         params
     })
 }
-
-export const getVideoFavoriteChannelsService = ()=>{
-    return axios.get(api.getVideoFavoriteChannels)
-}
-
-export const getVideoListService = (params:VideoParamsInterface) => {
-    return axios.get(api.getVideoList, {
-        params
-    })
-}
-
