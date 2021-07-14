@@ -39,6 +39,7 @@ export default ()=> {
             classify,
         }
         movieState.isEnd = false;
+        movieState.activeClassify = classify;
         movieState.list.splice(0, movieState.list.length)
         const result = await getMovieListService(movieState.params)
         movieState.list.push(...result as Array<MovieInterface>);
@@ -64,7 +65,9 @@ export default ()=> {
                 click: true,
             });
             movieState.bscroll.on('scrollEnd', async () => {
+                debugger
                 if (movieState.bscroll.y <= (movieState.bscroll.maxScrollY + 100) && !movieState.isEnd && !movieState.loading) {
+                    debugger
                     movieState.params.pageNum++
                     let result= await getMovieListService(movieState.params)
                     movieState.list.push(...result as Array<MovieInterface> )

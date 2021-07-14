@@ -85,12 +85,16 @@
                     </ul>
                     <i class="iconfont iconfont-search"></i>
                 </div>
-                <div ref="videoScrollWrapper" class="scroll-wrapper">
+                <div ref="movieScrollWrapper" class="scroll-wrapper">
                     <div class="scroll-container">
                         <div class="loading-box" v-if="!movieState.isInit"></div>
                         <ul class="movie-wrapper">
                             <li v-for="item,index in movieState.list" class="movie-item" :key="'movie-item'+index">
-                                <img class="movie-img" :src="item.img"/>
+                                <div class="movie-img-wrapper">
+                                    <img class="movie-img" :src="item.localImg"/>
+                                    <span class="movie-state" v-if="item.viewingState">{{item.viewingState}}</span>
+                                </div>
+
                                 <div class="movie-name">{{item.movieName}}</div>
                             </li>
                         </ul>
@@ -155,7 +159,7 @@
                 }
             }
 
-            await articleEffect.useInitArticleEffect()
+            articleEffect.useInitArticleEffect()
 
             return {
                 tabBottomNav,
@@ -264,12 +268,30 @@
                         .movie-item{
                             width: calc(50% - 0.5rem);
                             margin-bottom: 1rem;
+                            display: flex;
+                            flex-direction: column;
                             &:nth-child(even){
                                 margin-left: 1rem;
                             }
-                            .movie-img{
-                                width: 100%;
+                            .movie-img-wrapper{
+                                flex: 1;
+                                position: relative;
+                                .movie-img{
+                                    width: 100%;
+                                    height: 100%;
+                                }
+                                .movie-state{
+                                    position: absolute;
+                                    bottom: 0.2rem;
+                                    right: 0.2rem;
+                                    background: #4cce69;
+                                    color:#fff;
+                                    border-radius: 0.2rem;
+                                    font-size: 0.8rem;
+                                    padding: 0 0.2rem;
+                                }
                             }
+
                             .movie-name{
                                 width: 100%;
                                 overflow: hidden;
