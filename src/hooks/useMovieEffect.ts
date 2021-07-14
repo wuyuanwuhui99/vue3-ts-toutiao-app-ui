@@ -65,9 +65,7 @@ export default ()=> {
                 click: true,
             });
             movieState.bscroll.on('scrollEnd', async () => {
-                debugger
                 if (movieState.bscroll.y <= (movieState.bscroll.maxScrollY + 100) && !movieState.isEnd && !movieState.loading) {
-                    debugger
                     movieState.params.pageNum++
                     let result= await getMovieListService(movieState.params)
                     movieState.list.push(...result as Array<MovieInterface> )
