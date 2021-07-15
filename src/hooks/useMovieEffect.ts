@@ -24,7 +24,7 @@ export default ()=> {
         bscroll:null
     })
     
-    const movieScrollWrapper =  ref<HTMLElement>()
+    const movieScrollWrapper =  ref<HTMLElement>();
     
     
     /**
@@ -36,13 +36,13 @@ export default ()=> {
         movieState.params = {
             pageNum: 1,
             pageSize: 20,
-            classify,
+            classify
         }
         movieState.isEnd = false;
         movieState.activeClassify = classify;
         movieState.list.splice(0, movieState.list.length)
-        const result = await getMovieListService(movieState.params)
-        movieState.list.push(...result as Array<MovieInterface>);
+        const result:Array<MovieInterface> = await getMovieListService(movieState.params)
+        movieState.list.push(...result);
         nextTick(()=>{
             movieState.bscroll.refresh()
         })
@@ -55,22 +55,22 @@ export default ()=> {
      */
     const useInitMovieEffect = async ()=>{
         movieState.params.classify = "电影"
-        let result = await getMovieListService(movieState.params)
-        movieState.list.push(...result as Array<MovieInterface>)
-        movieState.isInit = true
-        movieState.loading = false
+        const result:Array<MovieInterface>  = await getMovieListService(movieState.params)
+        movieState.list.push(...result)
+        movieState.isInit = true;
+        movieState.loading = false;
         setTimeout(()=>{
             movieState.bscroll = new BScroll(movieScrollWrapper.value, {
                 probeType: 1,
-                click: true,
+                click: true
             });
             movieState.bscroll.on('scrollEnd', async () => {
                 if (movieState.bscroll.y <= (movieState.bscroll.maxScrollY + 100) && !movieState.isEnd && !movieState.loading) {
                     movieState.params.pageNum++
-                    let result= await getMovieListService(movieState.params)
-                    movieState.list.push(...result as Array<MovieInterface> )
+                    let result:Array<MovieInterface> = await getMovieListService(movieState.params);
+                    movieState.list.push(...result);
                     nextTick(() => {
-                        movieState.bscroll.refresh()
+                        movieState.bscroll.refresh();
                     })
                 }
             })

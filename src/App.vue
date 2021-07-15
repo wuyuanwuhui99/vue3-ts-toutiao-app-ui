@@ -1,7 +1,9 @@
 <template>
-    <Suspense>
-        <router-view/>
-    </Suspense>
+    <keep-alive>
+        <Suspense>
+            <router-view/>
+        </Suspense>
+    </keep-alive>
 </template>
 
 <style lang="less">

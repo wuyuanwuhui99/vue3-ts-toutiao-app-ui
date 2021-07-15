@@ -13,9 +13,9 @@
                 </div>
                 <div ref="articleScrollWrapper" class="scroll-wrapper">
                     <div class="scroll-container">
-                        <div class="loading-box" v-if="!isInit"></div>
+                        <div class="loading-box" v-if="!articleState.isInit"></div>
                         <ul class="articles">
-                            <li class="article-item" @click="tabArticleChannel(item)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
+                            <li class="article-item" @click="goArticleDetail(item.id)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
                                 <p class="title">{{item.title}}</p>
                                 <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
                                     <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>

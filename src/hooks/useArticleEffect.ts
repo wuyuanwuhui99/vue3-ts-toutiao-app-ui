@@ -9,7 +9,7 @@ import {
     getFavoriteChannelsListService, getArticleListService
 } from "../service/homeService"
 import BScroll from "better-scroll";
-
+import { useRoute, useRouter } from "vue-router";
 export default ()=> {
     const articleState = reactive<ArticleStateInterface>({
         isInit: true,
@@ -116,8 +116,13 @@ export default ()=> {
                 }
             })
         },500)
-    }
+    };
     
+    const router = useRouter()
+    
+    const goArticleDetail = (id:number)=>{
+        router.push(`/articleDetail/${id}`)
+    }
     
     return {
         getImgHtml,
@@ -125,6 +130,7 @@ export default ()=> {
         articleState,
         tabArticleChannel,
         articleScrollWrapper,
-        useInitArticleEffect
+        useInitArticleEffect,
+        goArticleDetail
     }
 }
