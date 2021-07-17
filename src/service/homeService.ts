@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "../api";
 import store from "../store"
-import {UserDataInterface,ArticleParamsInterface,VideoParamsInterface} from "../types";
+import {UserDataInterface,ArticleParamsInterface} from "../types";
 import {USER_DATA} from "../store/mutation-types"
 
 export const getUserDataService = async () => {

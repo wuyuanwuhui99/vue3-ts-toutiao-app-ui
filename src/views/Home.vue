@@ -22,7 +22,7 @@
                                 </div>
                                 <div class="footer-wrapper">
                                     <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
-                                    <a class="footer-item">{{item.userId}}</a>
+                                    <a class="footer-item">{{item.userInfo && item.userInfo.name ? item.userInfo.name : item.userId}}</a>
                                     <time class="footer-item">{{fomatTime(item.createTime)}}</time>
                                 </div>
                             </li>
@@ -419,6 +419,7 @@
                         flex-direction: row;
                         display: flex;
                         padding-top: 1rem;
+                        align-items: center;
                         .footer-item{
                             margin-left: 1rem;
                             &:first-child{
