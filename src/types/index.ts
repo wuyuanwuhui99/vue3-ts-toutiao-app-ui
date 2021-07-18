@@ -29,9 +29,9 @@ export interface ArticleInterface {
     source:string,//来源
     commentId:string,//评论id
     labels:string,//标签
-    userId:string,//用户id
-    userAvatar:string,//头像
-    userHref:string,//用户主页
+    authorId:string,//用户id
+    authorAvatar:string,//头像
+    authorHref:string,//用户主页
     ranks:string//排名
 }
 
@@ -50,7 +50,7 @@ export interface ArticleChannelInterface {
 
 export interface ArticleParamsInterface {
     channelId?:string,//频道id
-    userId?:string,//用户id
+    authorId?:string,//用户id
     keyword?:string,
     pageNum:number,//页码
     pageSize: number,//每页长度
@@ -92,17 +92,17 @@ export interface VideoInterface {
     score: string,//评分,
     category:string,//类目，值为banner首屏，carousel：滚动轮播,
     ranks:string,//排名,
-    userId:string,//用户名，这这个表不需要，为了跟记录叫和收藏表的结构一致,
+    authorId:string,//用户名，这这个表不需要，为了跟记录叫和收藏表的结构一致,
     duration:string,//时长,
     img:string,// 图片地址,
     createTime:string,//创建时间,
     updateTime:string//更新时间,
-    user:UserInfo,//用户信息
+    author:AuthorInfo,//用户信息
 }
 
-export interface UserInfo {
+export interface AuthorInfo {
     id:number,//主键
-    userId:string,//用户id
+    authorId:string,//用户id
     name:string,//名称
     authorDesc:string,//描述
     avatarUrl:string,//头像地址
@@ -120,7 +120,7 @@ export interface VideoParamsInterface {
     channelId?:string,//分类
     type?:string,//类型
     label?:string,//标签
-    userId?:string,//用户
+    authorId?:string,//用户
     keyword?:string,//关键字
 }
 

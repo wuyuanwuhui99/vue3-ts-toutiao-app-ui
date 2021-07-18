@@ -22,8 +22,8 @@
                                 </div>
                                 <div class="footer-wrapper">
                                     <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
-                                    <a class="footer-item">{{item.userInfo && item.userInfo.name ? item.userInfo.name : item.userId}}</a>
-                                    <time class="footer-item">{{fomatTime(item.createTime)}}</time>
+                                    <a class="footer-item">{{item.authorInfo && item.authorInfo.name ? item.authorInfo.name : item.authorId}}</a>
+                                    <time class="footer-item">{{item.createTime?fomatTime(item.createTime):""}}</time>
                                 </div>
                             </li>
                         </ul>
@@ -49,10 +49,10 @@
                         <div class="loading-box" v-if="!videoState.isInit"></div>
                         <ul class="articles">
                             <li v-for="item,index in videoState.list" class="article-item" :key="'video-item'+index">
-                                <div class="user-wrapper">
-                                    <img class="avater" :src="item.user.avatarUrl"/>
+                                <div class="author-wrapper">
+                                    <img class="avater" :src="item.author.avatarUrl"/>
                                     <div class="video-title-wrapper">
-                                        <div class="sub-title">{{item.user.authorDesc}}</div>
+                                        <div class="sub-title">{{item.author.authorDesc}}</div>
                                         <div class="main-title">{{item.title}}</div>
                                     </div>
                                 </div>
@@ -342,7 +342,7 @@
                 .article-item{
                     padding: 1rem;
                     border-bottom: 1px solid @border-color;
-                    .user-wrapper{
+                    .author-wrapper{
                         display: flex;
                         padding-bottom: 1rem;
                         .avater{
