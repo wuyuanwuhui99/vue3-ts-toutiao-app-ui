@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import stateInterface from "./stateInterface";
-import {ChannelsInterface, UserDataInterface} from "../types"
+import {UserDataInterface} from "../types"
 
 export default {
     [types.TOKEN](state: stateInterface, token: string): void {

@@ -1,3 +1,5 @@
+import {ArticleInterface} from "@/types";
+
 export const zorefull=(value:number):string|number=>{
     return value < 9 ? "0"+value:value
 }
@@ -22,6 +24,15 @@ export const fomatTime=(value:any):string=>{
     const minutes = zorefull(date.getMinutes());
     const seconds = zorefull(date.getSeconds());
     return `${year}-${month}-${dates} ${hour}:${minutes}:${seconds}`
-}
+};
 
+/**
+ * @author: wuwenqiang
+ * @description: 获取图片html
+ * @date: 2020-06-27 21:29
+ */
+export const getImg = (article:ArticleInterface)=>{
+    if (article.type == "video")return article.img ?  [`<div class="iconfont iconfont-play"></div><img src='${article.img}'/><div class="duration">${article.duration}</div>`] : []
+    return article.content.match(/<img[^<>]+>/g) || []
+};
 

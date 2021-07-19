@@ -24,7 +24,7 @@ export default ()=> {
             channelId:"",//分类
             type:"",//类型
             label:"",//标签
-            userId:"",//用户
+            authorId:"",//用户
             keyword:"",//关键字
         },
         channels:[],

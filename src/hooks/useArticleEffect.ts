@@ -1,6 +1,5 @@
 import {ref,reactive,nextTick} from "vue"
 import {
-    ArticleInterface,
     ArticleStateInterface,
     ArticleChannelInterface,
 } from "../types";
@@ -9,7 +8,7 @@ import {
     getFavoriteChannelsListService, getArticleListService
 } from "../service/homeService"
 import BScroll from "better-scroll";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 export default ()=> {
     const articleState = reactive<ArticleStateInterface>({
         isInit: true,
@@ -39,18 +38,7 @@ export default ()=> {
         }else{
             return htmlStr
         }
-    }
-    
-    /**
-     * @author: wuwenqiang
-     * @description: 获取图片html
-     * @date: 2020-06-27 21:29
-     */
-    const getImg = (article:ArticleInterface)=>{
-        if (article.type == "video")return article.img ?  [`<div class="iconfont iconfont-play"></div><img src='${article.img}'/><div class="duration">${article.duration}</div>`] : []
-        return article.content.match(/<img[^<>]+>/g) || []
-    }
-    
+    };
     
     /**
      * @author: wuwenqiang
@@ -68,13 +56,11 @@ export default ()=> {
         articleState.list.splice(0, articleState.list.length)
         if (navItem.channelName == "西瓜视频") articleState.params.type = "video"
         let res = await getArticleListService(articleState.params)
-        articleState.list.push(...res as Array<ArticleInterface>)
+        articleState.list.push(...res)
         nextTick(()=>{
             articleState.bscroll.refresh()
         })
     }
-    
-   
     
     /**
      * @author: wuwenqiang
@@ -83,15 +69,15 @@ export default ()=> {
      */
     const useInitArticleEffect = async ()=>{
         await getUserDataService();//获取用户信息
-        const res:Array<ArticleChannelInterface> = await getFavoriteChannelsListService();//获取频道信息
+        const res = await getFavoriteChannelsListService();//获取频道信息
         articleState.channels.push(...res)
-        let {channelId,id}= articleState.channels.find((item: ArticleChannelInterface) => item.status == 1)
+        let {channelId,id}= articleState.channels.find((item: ArticleChannelInterface) => item.status == 1);
         articleState.params.channelId = channelId;
         articleState.activeId = id
-        const reuslt:Array<ArticleInterface> = await getArticleListService(articleState.params).finally(()=>{
+        const reuslt = await getArticleListService(articleState.params).finally(()=>{
             articleState.isInit = true
-        })
-        articleState.list.push(...reuslt)
+        });
+        articleState.list.push(...reuslt);
         setTimeout(()=>{
             articleState.bscroll = new BScroll(articleScrollWrapper.value, {
                 probeType: 1,
@@ -102,17 +88,17 @@ export default ()=> {
                     articleState.params.pageNum++
                     let result = await getArticleListService(articleState.params).finally(()=>{
                         articleState.isInit = true
-                    })
+                    });
                     if(result.length == 0){
-                        articleState.isEnd = true
+                        articleState.isEnd = true;
                         return
                     }else{
-                        articleState.isEnd = false
+                        articleState.isEnd = false;
                     }
-                    articleState.list.push(...reuslt)
+                    articleState.list.push(...reuslt);
                     nextTick(() => {
-                        articleState.bscroll.refresh()
-                    })
+                        articleState.bscroll.refresh();
+                    });
                 }
             })
         },500)
@@ -126,7 +112,6 @@ export default ()=> {
     
     return {
         getImgHtml,
-        getImg,
         articleState,
         tabArticleChannel,
         articleScrollWrapper,

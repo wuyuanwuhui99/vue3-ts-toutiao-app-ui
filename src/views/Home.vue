@@ -16,9 +16,12 @@
                         <div class="loading-box" v-if="!articleState.isInit"></div>
                         <ul class="articles">
                             <li class="article-item" @click="goArticleDetail(item.id)" :key="'article-item'+index+activeId" v-for="item,index in articleState.list">
-                                <p class="title">{{item.title}}</p>
-                                <div class="img-wrapper" v-if="getImg(item).length > 0 && item.isTop != '1'">
-                                    <div class="img-container" :class="{'img-container-video':item.type=='video'}" v-for="img,index in getImg(item).slice(0,4)" v-html="getImgHtml(img,getImg(item).length,index)"></div>
+                                <div class="title-wrapper">
+                                    <p class="title">{{item.title}}</p>
+                                    <div class="single-img" v-height v-if="item.imgList.length === 1" v-html="item.imgList[0]"></div>
+                                </div>
+                                <div class="img-wrapper" v-if="item.imgList.length > 1 && item.isTop != '1'">
+                                    <div class="img-container" v-height :class="{'img-container-video':item.type=='video'}" v-for="img,index in item.imgList.slice(0,4)" v-html="getImgHtml(img,item.imgList.length,index)"></div>
                                 </div>
                                 <div class="footer-wrapper">
                                     <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
@@ -32,7 +35,6 @@
                             <div class="icon-loading" v-else></div>
                         </template>
                     </div>
-
                 </div>
             </div>
             <div class="section" v-show="bottomTabIndex == 1">
@@ -50,13 +52,13 @@
                         <ul class="articles">
                             <li v-for="item,index in videoState.list" class="article-item" :key="'video-item'+index">
                                 <div class="author-wrapper">
-                                    <img class="avater" :src="item.author.avatarUrl"/>
+                                    <img class="avater" :src="item.authorInfo.avatarUrl"/>
                                     <div class="video-title-wrapper">
-                                        <div class="sub-title">{{item.author.authorDesc}}</div>
-                                        <div class="main-title">{{item.title}}</div>
+                                        <div class="sub-title">{{item.authorInfo.authorDesc}}</div>
                                     </div>
                                 </div>
                                 <div class="video-img-wrapper">
+                                    <div class="main-title">{{item.title}}</div>
                                     <img :src="item.img" class="video-img">
                                     <i class="iconfont iconfont-play"></i>
                                 </div>
@@ -139,6 +141,13 @@
     import useMovieEffect from "../hooks/useMovieEffect";
     export default defineComponent({
         name: 'Home',
+        directives: {
+            height: {
+                mounted(el) {
+                    el.style.height = `${el.offsetWidth*0.75}px`
+                }
+            },
+        },
         async setup() {
             let bottomTabIndex = ref(0)
             const articleEffect = useArticleEffect()
@@ -221,7 +230,11 @@
                 height: auto;
             }
         }
-
+    }
+    .single-img{
+        img{
+            width: 100%;
+        }
     }
 </style>
 <style lang="less" scoped>
@@ -363,15 +376,19 @@
                                 padding-bottom: 0.5rem;
                                 width: 100%;
                             }
-                            .main-title{
-                                width: 100%;
-                            }
                         }
                     }
                     .video-img-wrapper{
                         position: relative;
                         .video-img{
                             width: 100%;
+                        }
+                        .main-title{
+                            width: 100%;
+                            position: absolute;
+                            top:0.5rem;
+                            left: 0.5rem;
+                            color: #fff;
                         }
                         .iconfont-play{
                             position: absolute;
@@ -402,12 +419,19 @@
                         }
                     }
 
-                    .title{
-                        font-size: @article-title-font-size;
-                        display: -webkit-box;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
-                        overflow: hidden;
+                    .title-wrapper{
+                        display: flex;
+                        .title{
+                            font-size: @article-title-font-size;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 2;
+                            overflow: hidden;
+                            flex: 1;
+                        }
+                        .single-img{
+                            width: 25%;
+                        }
                     }
                     .img-wrapper{
                         display: flex;

@@ -33,6 +33,7 @@ export interface ArticleInterface {
     authorAvatar:string,//头像
     authorHref:string,//用户主页
     ranks:string//排名
+    imgList?:Array<string>,//预览图片列表
 }
 
 export interface ArticleChannelInterface {
@@ -64,7 +65,7 @@ export interface ArticleStateInterface {
     isEnd: boolean,
     loading:boolean,
     params:ArticleParamsInterface,
-    channels:Array<ChannelsInterface>,
+    channels:Array<ArticleChannelInterface>,
     list:Array<ArticleInterface>,
     bscroll:any
 }
@@ -97,7 +98,7 @@ export interface VideoInterface {
     img:string,// 图片地址,
     createTime:string,//创建时间,
     updateTime:string//更新时间,
-    author:AuthorInfo,//用户信息
+    authorInfo:AuthorInfo,//用户信息
 }
 
 export interface AuthorInfo {
