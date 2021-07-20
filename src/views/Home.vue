@@ -4,11 +4,14 @@
         <div id="tab-wrapper">
             <div class="section"  v-show="bottomTabIndex == 0">
                 <div class="nav-wrapper">
-                    <ul class="nav-list">
-                        <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item-article'+index">
-                            {{item.channelName}}
-                        </li>
-                    </ul>
+                    <div class="nav-list-scroll" ref="articleNavScroll">
+                        <ul class="nav-list">
+                            <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':articleState.activeId == item.id}" v-for="item,index in articleState.channels" :key="'nav-item-article'+index">
+                                {{item.channelName}}
+                            </li>
+                        </ul>
+                    </div>
+
                     <i class="iconfont iconfont-search"></i>
                 </div>
                 <div ref="articleScrollWrapper" class="scroll-wrapper">
@@ -39,11 +42,13 @@
             </div>
             <div class="section" v-show="bottomTabIndex == 1">
                 <div class="nav-wrapper">
-                    <ul class="nav-list">
-                        <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item-video'+index">
-                            {{item.channelName}}
-                        </li>
-                    </ul>
+                    <div class="nav-list-scroll" ref="videoNavScroll">
+                        <ul class="nav-list">
+                            <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':videoState.activeChannelId == item.channelId}" v-for="item,index in videoState.channels" :key="'nav-item-video'+index">
+                                {{item.channelName}}
+                            </li>
+                        </ul>
+                    </div>
                     <i class="iconfont iconfont-search"></i>
                 </div>
                 <div ref="videoScrollWrapper" class="scroll-wrapper">
@@ -80,11 +85,13 @@
             </div>
             <div class="section" v-show="bottomTabIndex == 2">
                 <div class="nav-wrapper">
-                    <ul class="nav-list">
-                        <li class="nav-item" @click="tabMovieChannel(item)"  :class="{'nav-item-active':movieState.activeClassify == item}" v-for="item,index in movieState.classifies" :key="'nav-item-movie'+index">
-                            {{item}}
-                        </li>
-                    </ul>
+                    <div class="nav-list-scroll" ref="movieNavScroll">
+                        <ul class="nav-list">
+                            <li class="nav-item" @click="tabMovieChannel(item)"  :class="{'nav-item-active':movieState.activeClassify == item}" v-for="item,index in movieState.classifies" :key="'nav-item-movie'+index">
+                                {{item}}
+                            </li>
+                        </ul>
+                    </div>
                     <i class="iconfont iconfont-search"></i>
                 </div>
                 <div ref="movieScrollWrapper" class="scroll-wrapper">
@@ -320,29 +327,40 @@
                 display: flex;
                 align-items: center;
                 border-bottom: 1px solid #ddd;
-                .nav-list{
+                .nav-list-scroll{
                     flex: 1;
-                    white-space: nowrap;
-                    overflow-x: auto;
-                    display: flex;
-                    padding: 1rem 1rem 0 1rem;
-                    font-size: 1.2rem;
-                    &::-webkit-scrollbar{
-                        display: none;
-                    }
-                    .nav-item{
-                        list-style: none;
-                        margin:0 0.5rem;
-                        padding-bottom: 1rem;
-                        &:first-child{
-                            margin-left: 0;
+                    overflow-x: hidden;
+                    .nav-list{
+                        display: flex;
+                        float: left;
+                        padding: 1rem 1rem 0 1rem;
+                        font-size: 1.2rem;
+                        white-space: nowrap;
+                        &::-webkit-scrollbar{
+                            display: none;
                         }
-                        &.nav-item-active{
-                            color: @color-active;
-                            border-bottom: 2px solid @color-active;
+                        .nav-item{
+                            list-style: none;
+                            margin:0 0.5rem;
+                            padding-bottom: 1rem;
+                            moz-user-select: -moz-none;
+                            -moz-user-select: none;
+                            -o-user-select:none;
+                            -khtml-user-select:none;
+                            -webkit-user-select:none;
+                            -ms-user-select:none;
+                            user-select:none;
+                            &:first-child{
+                                margin-left: 0;
+                            }
+                            &.nav-item-active{
+                                color: @color-active;
+                                border-bottom: 2px solid @color-active;
+                            }
                         }
                     }
                 }
+
                 .iconfont-search{
                     font-size: @iconfont-size;
                     margin: @iconfont-margin;
@@ -359,8 +377,8 @@
                         display: flex;
                         padding-bottom: 1rem;
                         .avater{
-                            width: 3rem;
-                            height: 3rem;
+                            width: 2rem;
+                            height: 2rem;
                             border-radius: 50%;
                         }
                         .video-title-wrapper{
@@ -430,6 +448,8 @@
                             flex: 1;
                         }
                         .single-img{
+                            margin-left: 0.5rem;
+                            overflow: hidden;
                             width: 25%;
                         }
                     }

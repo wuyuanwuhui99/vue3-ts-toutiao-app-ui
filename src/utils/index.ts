@@ -16,6 +16,8 @@ export const fomatTime=(value:any):string=>{
         return Math.ceil(diff/(60*60))+"小时前"
     }else if(diff < 60*60*24*30){
         return Math.ceil(diff/(60*60*24))+"天前"
+    }else if(diff < 60*60*24*30*12){
+        return Math.ceil(diff/(60*60*24*30))+"个月前"
     }
     const year = zorefull(date.getFullYear());
     const month = zorefull(date.getMonth()+1);
@@ -36,3 +38,11 @@ export const getImg = (article:ArticleInterface)=>{
     return article.content.match(/<img[^<>]+>/g) || []
 };
 
+export const  isMobile = ()=> {
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+       return true;//手机端
+    } else {
+        return  false;//pc端
+    }
+}

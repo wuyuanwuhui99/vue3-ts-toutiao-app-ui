@@ -6,6 +6,21 @@
     </keep-alive>
 </template>
 
+<script>
+    import {defineComponent,onMounted} from 'vue';
+    import {isMobile} from './utils'
+
+    export default defineComponent({
+        setup() {
+            onMounted(()=>{
+                if(!isMobile()){
+                    document.querySelector('#app').style = 'width:400px;max-height:800px;height:100%;border:1px solid #eee;margin: 0 auto'
+                }
+            })
+        }
+    })
+</script>
+
 <style lang="less">
     #app {
         font-family: Avenir, Helvetica, Arial, sans-serif;

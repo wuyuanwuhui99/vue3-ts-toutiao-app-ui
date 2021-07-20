@@ -24,8 +24,8 @@ export default ()=> {
         list:[],
         bscroll:null
     });
-    
-    const articleScrollWrapper = ref<HTMLElement>()
+    const articleNavScroll = ref<HTMLElement>();
+    const articleScrollWrapper = ref<HTMLElement>();
     
     /**
      * @author: wuwenqiang
@@ -79,6 +79,14 @@ export default ()=> {
         });
         articleState.list.push(...reuslt);
         setTimeout(()=>{
+            new BScroll(articleNavScroll.value, {
+                probeType: 1,
+                click: true,
+                scrollX: true,
+                scrollY: false,
+                eventPassthrough: "vertical"
+            });
+            
             articleState.bscroll = new BScroll(articleScrollWrapper.value, {
                 probeType: 1,
                 click: true,
@@ -114,6 +122,7 @@ export default ()=> {
         getImgHtml,
         articleState,
         tabArticleChannel,
+        articleNavScroll,
         articleScrollWrapper,
         useInitArticleEffect,
         goArticleDetail

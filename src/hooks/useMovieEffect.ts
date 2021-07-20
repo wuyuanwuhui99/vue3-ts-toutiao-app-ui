@@ -22,8 +22,8 @@ export default ()=> {
         classifies:["电影","电视剧","动漫","综艺","新片场","福利","恐怖"],
         list:[],
         bscroll:null
-    })
-    
+    });
+    const movieNavScroll = ref<HTMLElement>();
     const movieScrollWrapper =  ref<HTMLElement>();
     
     
@@ -60,6 +60,13 @@ export default ()=> {
         movieState.isInit = true;
         movieState.loading = false;
         setTimeout(()=>{
+            new BScroll(movieNavScroll.value, {
+                probeType: 1,
+                click: true,
+                scrollX: true,
+                scrollY: false,
+                eventPassthrough: "vertical"
+            });
             movieState.bscroll = new BScroll(movieScrollWrapper.value, {
                 probeType: 1,
                 click: true
@@ -81,6 +88,7 @@ export default ()=> {
     return {
         movieState,
         tabMovieChannel,
+        movieNavScroll,
         movieScrollWrapper,
         useInitMovieEffect
     }

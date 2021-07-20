@@ -30,9 +30,9 @@ export default ()=> {
         channels:[],
         list:[],
         bscroll:null
-    })
-    
-    const videoScrollWrapper =  ref<HTMLElement>()
+    });
+    const videoNavScroll = ref<HTMLElement>();
+    const videoScrollWrapper =  ref<HTMLElement>();
     
     
     /**
@@ -45,7 +45,7 @@ export default ()=> {
             pageNum: 1,
             pageSize: 20,
             channelId: navItem.channelId,
-        }
+        };
         videoState.isEnd = false;
         videoState.list.splice(0, videoState.list.length)
         let res = await getVideoListService(videoState.params)
@@ -53,7 +53,7 @@ export default ()=> {
         nextTick(()=>{
             videoState.bscroll.refresh()
         })
-    }
+    };
     
     /**
      * @author: wuwenqiang
@@ -61,27 +61,34 @@ export default ()=> {
      * @date: 2020-07-02 00:11
      */
     const useInitVideoEffect = async ()=>{
-        let res = await getVideoFavoriteChannelsService()
-        videoState.channels.push(...res as Array<VideoChannelInterface>)
-        videoState.params.channelId = videoState.channels[0].channelId
-        let result = await getVideoListService(videoState.params)
-        videoState.list.push(...result as Array<VideoInterface>)
-        videoState.isInit = true
-        videoState.loading = false
-        videoState.activeChannelId = videoState.channels[0].channelId
+        let res = await getVideoFavoriteChannelsService();
+        videoState.channels.push(...res as Array<VideoChannelInterface>);
+        videoState.params.channelId = videoState.channels[0].channelId;
+        let result = await getVideoListService(videoState.params);
+        videoState.list.push(...result as Array<VideoInterface>);
+        videoState.isInit = true;
+        videoState.loading = false;
+        videoState.activeChannelId = videoState.channels[0].channelId;
         setTimeout(()=>{
+            new BScroll(videoNavScroll.value, {
+                probeType: 1,
+                click: true,
+                scrollX: true,
+                scrollY: false,
+                eventPassthrough: "vertical"
+            });
             videoState.bscroll = new BScroll(videoScrollWrapper.value, {
                 probeType: 1,
                 click: true,
             });
             videoState.bscroll.on('scrollEnd', async () => {
                 if (videoState.bscroll.y <= (videoState.bscroll.maxScrollY + 100) && !videoState.isEnd && !videoState.loading) {
-                    videoState.params.pageNum++
-                    let result:Array<VideoInterface> = await getVideoListService(videoState.params)
-                    videoState.list.push(...result)
+                    videoState.params.pageNum++;
+                    let result:Array<VideoInterface> = await getVideoListService(videoState.params);
+                    videoState.list.push(...result);
                     nextTick(() => {
                         videoState.bscroll.refresh()
-                    })
+                    });
                 }
             })
         },100)
@@ -91,6 +98,7 @@ export default ()=> {
     return {
         videoState,
         tabVideoChannel,
+        videoNavScroll,
         videoScrollWrapper,
         useInitVideoEffect
     }
