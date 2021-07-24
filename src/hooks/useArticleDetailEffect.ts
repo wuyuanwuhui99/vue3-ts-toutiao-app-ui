@@ -18,6 +18,6 @@ export default ()=> {
     
     return {
         useInitArticleDetailEffect,
-        ...toRefs(articleDetailState)
+        articleDetailState
     }
 }

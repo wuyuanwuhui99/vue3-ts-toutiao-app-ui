@@ -1,8 +1,6 @@
 <template>
     <keep-alive>
-        <Suspense>
-            <router-view/>
-        </Suspense>
+        <router-view/>
     </keep-alive>
 </template>
 

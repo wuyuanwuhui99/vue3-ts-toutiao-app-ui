@@ -60,3 +60,7 @@
 .iconfont-views:before {
   content: "\e68c";
 }
+
+.iconfont-more:before {
+  content: "\e639";
+}

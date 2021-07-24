@@ -56,24 +56,27 @@
                         <div class="loading-box" v-if="!videoState.isInit"></div>
                         <ul class="articles">
                             <li v-for="item,index in videoState.list" class="article-item" :key="'video-item'+index">
-                                <div class="author-wrapper">
-                                    <img class="avater" :src="item.authorInfo.avatarUrl"/>
-                                    <div class="video-title-wrapper">
-                                        <div class="sub-title">{{item.authorInfo.authorDesc}}</div>
-                                    </div>
-                                </div>
+
                                 <div class="video-img-wrapper">
                                     <div class="main-title">{{item.title}}</div>
                                     <img :src="item.img" class="video-img">
                                     <i class="iconfont iconfont-play"></i>
                                 </div>
-                                <div class="video-footer">
-                                    <i class="icon-video-footer iconfont iconfont-like"></i>
-                                    <i class="icon-video-footer iconfont iconfont-comment"></i>
-                                    <i class="icon-video-footer iconfont iconfont-collection"></i>
-                                    <i class="icon-video-footer iconfont iconfont-views"></i>
-                                    <span class="video-time">{{fomatTime(item.publishTime)}}</span>
+                                <div class="author-wrapper">
+                                    <img class="avater" :src="item.authorInfo.avatarUrl"/>
+                                    <div class="video-title-wrapper">
+                                        <div class="sub-title">{{item.authorInfo.authorDesc}}</div>
+                                        <span class="video-time">{{fomatTime(item.publishTime)}}</span>
+                                        <span class="iconfont iconfont-more"></span>
+                                    </div>
                                 </div>
+<!--                                <div class="video-footer">-->
+<!--                                    <i class="icon-video-footer iconfont iconfont-like"></i>-->
+<!--                                    <i class="icon-video-footer iconfont iconfont-comment"></i>-->
+<!--                                    <i class="icon-video-footer iconfont iconfont-collection"></i>-->
+<!--                                    <i class="icon-video-footer iconfont iconfont-views"></i>-->
+<!--                                    <span class="video-time">{{fomatTime(item.publishTime)}}</span>-->
+<!--                                </div>-->
                             </li>
                         </ul>
                         <template v-if="videoState.list.length>0">
@@ -155,7 +158,7 @@
                 }
             },
         },
-        async setup() {
+        setup() {
             let bottomTabIndex = ref(0)
             const articleEffect = useArticleEffect()
             const videoEffect = useVideoEffect();
@@ -173,7 +176,7 @@
                 }else if(index == 2 && !movieEffect.movieState.isInit){
                     movieEffect.useInitMovieEffect()
                 }
-            }
+            };
 
             articleEffect.useInitArticleEffect()
 
@@ -197,7 +200,7 @@
             overflow: hidden;
             display: flex;
             flex: 1;
-            margin-left: 0.5rem;
+            margin-left: @small-margin;
             position: relative;
             &.img-container-video{
                 max-width: 100%;
@@ -206,8 +209,8 @@
             }
             .duration{
                 position: absolute;
-                bottom: 0.5rem;
-                right: 0.5rem;
+                bottom: @small-margin;
+                right: @small-margin;
                 color: #fff;
                 z-index: 1;
                 font-size: 0.8rem;
@@ -284,14 +287,14 @@
                     .movie-wrapper{
                         display: flex;
                         flex-wrap: wrap;
-                        padding: 1rem;
+                        padding: @big-margin;
                         .movie-item{
-                            width: calc(50% - 0.5rem);
-                            margin-bottom: 1rem;
+                            width: calc(50% - @small-margin);
+                            margin-bottom: @big-margin;
                             display: flex;
                             flex-direction: column;
                             &:nth-child(even){
-                                margin-left: 1rem;
+                                margin-left: @big-margin;
                             }
                             .movie-img-wrapper{
                                 flex: 1;
@@ -333,7 +336,7 @@
                     .nav-list{
                         display: flex;
                         float: left;
-                        padding: 1rem 1rem 0 1rem;
+                        padding: @big-margin @big-margin 0 @big-margin;
                         font-size: 1.2rem;
                         white-space: nowrap;
                         &::-webkit-scrollbar{
@@ -341,8 +344,8 @@
                         }
                         .nav-item{
                             list-style: none;
-                            margin:0 0.5rem;
-                            padding-bottom: 1rem;
+                            margin:0 @small-margin;
+                            padding-bottom: @big-margin;
                             moz-user-select: -moz-none;
                             -moz-user-select: none;
                             -o-user-select:none;
@@ -371,11 +374,12 @@
                 display: flex;
                 flex-direction: column;
                 .article-item{
-                    padding: 1rem;
+                    padding: @big-margin;
                     border-bottom: 1px solid @border-color;
                     .author-wrapper{
                         display: flex;
-                        padding-bottom: 1rem;
+                        margin-top: @small-margin;
+                        align-items: center;
                         .avater{
                             width: 2rem;
                             height: 2rem;
@@ -383,16 +387,23 @@
                         }
                         .video-title-wrapper{
                             flex: 1;
-                            margin-left: 1rem;
+                            margin-left: @big-margin;
                             max-width: calc(100% - 4rem);
+                            display: flex;
+                            justify-content: space-between;
                             .sub-title{
                                 color:@color-icon;
                                 font-size: @article-footer-font-size;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                padding-bottom: 0.5rem;
-                                width: 100%;
+                                padding-bottom: @small-margin;
+                            }
+                            .video-time{
+                                color: @color-icon;
+                            }
+                            .iconfont-more{
+                                color: @color-icon;
                             }
                         }
                     }
@@ -404,8 +415,8 @@
                         .main-title{
                             width: 100%;
                             position: absolute;
-                            top:0.5rem;
-                            left: 0.5rem;
+                            top:@small-margin;
+                            left: @small-margin;
                             color: #fff;
                         }
                         .iconfont-play{
@@ -423,10 +434,10 @@
                         }
                     }
                     .video-footer{
-                        padding-top: 1rem;
+                        padding-top: @big-margin;
                         .icon-video-footer{
                             font-size: 1.4rem;
-                            margin-left: 1rem;
+                            margin-left: @big-margin;
                             &:first-child{
                                 margin-left: 0;
                             }
@@ -448,24 +459,24 @@
                             flex: 1;
                         }
                         .single-img{
-                            margin-left: 0.5rem;
+                            margin-left: @small-margin;
                             overflow: hidden;
                             width: 25%;
                         }
                     }
                     .img-wrapper{
                         display: flex;
-                        padding-top: 1rem;
+                        padding-top: @big-margin;
                     }
                     .footer-wrapper{
                         font-size: @article-footer-font-size;
                         color: @article-footer-color;
                         flex-direction: row;
                         display: flex;
-                        padding-top: 1rem;
+                        padding-top: @big-margin;
                         align-items: center;
                         .footer-item{
-                            margin-left: 1rem;
+                            margin-left: @big-margin;
                             &:first-child{
                                 margin-left: 0;
                             }
@@ -490,7 +501,7 @@
         #footer-tab-wrapper{
             display: flex;
             border-top: 1px solid @border-color;
-            padding: 0.5rem 0;
+            padding: @small-margin 0;
             .footer-tab-item{
                 display: flex;
                 flex: 1;

@@ -3,13 +3,12 @@
         <div id="article-wrapper">
             <div id="article-title">{{articleDetail.title}}</div>
             <div id="article-meta">
-                <div id="article-author">
-                    <img id="author-avater" v-if="articleDetail.userInfo && articleDetail.userInfo.avatarUrl" :src="articleDetail.userInfo.avatarUrl"/>
-                    <div id="article-user-wrapper">
-                        <div id="acticle-user">{{articleDetail.userInfo && articleDetail.userInfo.name ? articleDetail.userInfo.name: articleDetail.userId}}</div>
-                        <div>{{fomatTime(articleDetail.createTime)}}</div>
-                    </div>
+                <div id="article-userInfo">
+                    <img id="article-avater" v-if="articleDetail.authorInfo && articleDetail.authorInfo.avatarUrl" :src="articleDetail.authorInfo.avatarUrl"/>
+                    <div id="acticle-user">{{articleDetail.authorInfo && articleDetail.authorInfo.name ? articleDetail.authorInfo.name: articleDetail.authorId}}</div>
+                    <div v-if="articleDetail.createTime">{{fomatTime(articleDetail.createTime)}}</div>
                 </div>
+                <div id="button-focus">关注</div>
             </div>
             <article id="article-text" v-html="articleDetail.content"></article>
         </div>
@@ -18,18 +17,18 @@
 </template>
 
 <script>
-    import {defineComponent} from 'vue';
+    import {defineComponent,toRefs} from 'vue';
     import useArticleDetailEffect from "../hooks/useArticleDetailEffect";
     import {fomatTime} from "../utils";
     export default defineComponent({
         name: 'ArticleDetail',
         setup() {
-            const {articleDetail,useInitArticleDetailEffect} = useArticleDetailEffect();
+            const {articleDetailState,useInitArticleDetailEffect} = useArticleDetailEffect();
 
             useInitArticleDetailEffect()
 
             return {
-                articleDetail,
+                ...toRefs(articleDetailState),
                 fomatTime
             }
         }
@@ -58,22 +57,27 @@
             #article-meta{
                 color: @article-footer-color;
                 font-size: @article-footer-font-size;
-                padding-bottom: 1rem;
+                padding-bottom: @small-margin;
                 display: flex;
                 align-items: center;
-                #article-author{
+                #article-userInfo{
                     flex: 1;
                     display: flex;
                     align-items: center;
-                    #author-avater{
-                        width: 3rem;
-                        height: 3rem;
+                    #acticle-user{
+                        margin:0 @small-margin;
+                    }
+                    #article-avater{
+                        width: 2rem;
+                        height: 2rem;
                         border-radius: 50%;
-                        margin-right: 1rem;
                     }
-                    #article-user-wrapper{
-                        flex: 1;
-                    }
+                }
+                #button-focus{
+                    border:1px solid @border-color;
+                    border-radius: @border-raduis;
+                    padding:0.3rem @small-margin;
+                    color: @article-footer-color;
                 }
             }
         }
