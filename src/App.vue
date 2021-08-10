@@ -1,7 +1,9 @@
 <template>
-    <keep-alive>
-        <router-view/>
-    </keep-alive>
+    <Suspense>
+        <keep-alive>
+            <router-view/>
+        </keep-alive>
+    </Suspense>
 </template>
 
 <script>

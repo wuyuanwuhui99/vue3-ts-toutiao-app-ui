@@ -1,12 +1,15 @@
 import axios, {AxiosResponse} from "axios";
 import api from "../api";
-import store from "../store"
+import store from "../store";
+import {useStore} from "vuex";
 import {UserDataInterface, ArticleParamsInterface, ArticleInterface, ArticleChannelInterface} from "../types";
 import {USER_DATA} from "../store/mutation-types"
 import {getImg} from "../utils";
 export const getUserDataService = async () => {
     let data =  await axios.get(api.getUserData).then((res:AxiosResponse<UserDataInterface>)=>res.data);
+    // const store = useStore();
     store.commit(USER_DATA, data)
+    // store.commit(USER_DATA, data)
 }
 
 export const getFavoriteChannelsListService = async () => {

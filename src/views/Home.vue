@@ -63,20 +63,11 @@
                                     <i class="iconfont iconfont-play"></i>
                                 </div>
                                 <div class="author-wrapper">
-                                    <img class="avater" :src="item.authorInfo.avatarUrl"/>
-                                    <div class="video-title-wrapper">
-                                        <div class="sub-title">{{item.authorInfo.authorDesc}}</div>
-                                        <span class="video-time">{{fomatTime(item.publishTime)}}</span>
-                                        <span class="iconfont iconfont-more"></span>
-                                    </div>
+                                    <img class="avater" v-if="item.authorInfo.avatarUrl" :src="item.authorInfo.avatarUrl"/>
+                                    <div class="sub-title" v-if="item.authorInfo.authorDesc">{{item.authorInfo.authorDesc}}</div>
+                                    <span class="video-time">{{fomatTime(item.publishTime)}}</span>
+                                    <span class="iconfont iconfont-more"></span>
                                 </div>
-<!--                                <div class="video-footer">-->
-<!--                                    <i class="icon-video-footer iconfont iconfont-like"></i>-->
-<!--                                    <i class="icon-video-footer iconfont iconfont-comment"></i>-->
-<!--                                    <i class="icon-video-footer iconfont iconfont-collection"></i>-->
-<!--                                    <i class="icon-video-footer iconfont iconfont-views"></i>-->
-<!--                                    <span class="video-time">{{fomatTime(item.publishTime)}}</span>-->
-<!--                                </div>-->
                             </li>
                         </ul>
                         <template v-if="videoState.list.length>0">
@@ -117,8 +108,17 @@
                     </div>
                 </div>
             </div>
-            <div class="section" v-show="bottomTabIndex == 3">
-
+            <div class="section" v-show="bottomTabIndex == 3" v-if="userData">
+                <div id="my-header">
+                    <div id="my-avater-wrapper">
+                        <img :src="userData.avater" id="my-avater-img"/>
+                        <div id="user-info">
+                            <div id="user-name">吴时吴刻</div>
+                            <div id="user-sign">无怨，有悔</div>
+                        </div>
+                        <i class="iconfont iconfont-set"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -149,6 +149,7 @@
     import {fomatTime} from "../utils";
     import useVideoEffect from "../hooks/useVideoEffect";
     import useMovieEffect from "../hooks/useMovieEffect";
+    import store from "../store";
     export default defineComponent({
         name: 'Home',
         directives: {
@@ -158,31 +159,32 @@
                 }
             },
         },
-        setup() {
-            let bottomTabIndex = ref(0)
-            const articleEffect = useArticleEffect()
+        async setup() {
+            let bottomTabIndex = ref(0);
+            const articleEffect = useArticleEffect();
             const videoEffect = useVideoEffect();
-            const movieEffect = useMovieEffect()
+            const movieEffect = useMovieEffect();
 
             /**
              * @author: wuwenqiang
              * @description: 底部切换
              * @date: 2020-06-30 23:28
              */
-            const tabBottomNav = async (index:number)=>{
+            const tabBottomNav = async (index: number) => {
                 bottomTabIndex.value = index;
-                if(index == 1 && !videoEffect.videoState.isInit){//获取视频分类和列表
-                    videoEffect.useInitVideoEffect()
-                }else if(index == 2 && !movieEffect.movieState.isInit){
-                    movieEffect.useInitMovieEffect()
+                if (index == 1 && !videoEffect.videoState.isInit) {//获取视频分类和列表
+                    videoEffect.useInitVideoEffect();
+                } else if (index == 2 && !movieEffect.movieState.isInit) {
+                    movieEffect.useInitMovieEffect();
                 }
             };
 
-            articleEffect.useInitArticleEffect()
+            await articleEffect.useInitArticleEffect();
 
             return {
                 tabBottomNav,
                 fomatTime,
+                userData:store.state.userData,
                 ...articleEffect,
                 ...videoEffect,
                 ...movieEffect,
@@ -289,12 +291,13 @@
                         flex-wrap: wrap;
                         padding: @big-margin;
                         .movie-item{
-                            width: calc(50% - @small-margin);
+                            width: calc((100% - 1rem)/3);
                             margin-bottom: @big-margin;
                             display: flex;
                             flex-direction: column;
-                            &:nth-child(even){
-                                margin-left: @big-margin;
+                            margin-left: @small-margin;
+                            &:nth-child(3n+1){
+                                margin-left: 0;
                             }
                             .movie-img-wrapper{
                                 flex: 1;
@@ -302,6 +305,7 @@
                                 .movie-img{
                                     width: 100%;
                                     height: 100%;
+                                    border-radius: @border-raduis;
                                 }
                                 .movie-state{
                                     position: absolute;
@@ -330,6 +334,7 @@
                 display: flex;
                 align-items: center;
                 border-bottom: 1px solid #ddd;
+                min-height: 3rem;
                 .nav-list-scroll{
                     flex: 1;
                     overflow-x: hidden;
@@ -385,27 +390,24 @@
                             height: 2rem;
                             border-radius: 50%;
                         }
-                        .video-title-wrapper{
-                            flex: 1;
-                            margin-left: @big-margin;
-                            max-width: calc(100% - 4rem);
-                            display: flex;
-                            justify-content: space-between;
-                            .sub-title{
-                                color:@color-icon;
-                                font-size: @article-footer-font-size;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;
-                                padding-bottom: @small-margin;
-                            }
-                            .video-time{
-                                color: @color-icon;
-                            }
-                            .iconfont-more{
-                                color: @color-icon;
-                            }
+
+                        .sub-title{
+                            color:@color-icon;
+                            font-size: @article-footer-font-size;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            padding: 0 1rem;
+                            max-width: 10rem;
                         }
+                        .video-time{
+                            color: @color-icon;
+                            flex: 1;
+                        }
+                        .iconfont-more{
+                            color: @color-icon;
+                        }
+
                     }
                     .video-img-wrapper{
                         position: relative;
@@ -496,6 +498,37 @@
             .loading-tip{
                 line-height: 10;
                 text-align: center;
+            }
+            #my-header{
+                height: 10rem;
+                padding: 1rem;
+                #my-avater-wrapper{
+                    display: flex;
+                    align-items: center;
+                    #my-avater-img{
+                        height: 3rem;
+                        width: 3rem;
+                        border-radius: 50%;
+                        border: 2px solid @color-active;
+                    }
+                    #user-info{
+                        flex: 1;
+                        padding-left: @big-margin;
+                        #user-name{
+                            font-weight: bold;
+                        }
+                        #user-sign{
+                            padding-top: @small-margin;
+                            color:@color-icon;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                    .iconfont-set{
+                        color: @color-icon;
+                    }
+                }
             }
         }
         #footer-tab-wrapper{
