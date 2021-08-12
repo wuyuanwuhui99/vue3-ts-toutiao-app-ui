@@ -108,15 +108,81 @@
                     </div>
                 </div>
             </div>
-            <div class="section" v-show="bottomTabIndex == 3" v-if="userData">
-                <div id="my-header">
-                    <div id="my-avater-wrapper">
-                        <img :src="userData.avater" id="my-avater-img"/>
-                        <div id="user-info">
-                            <div id="user-name">吴时吴刻</div>
-                            <div id="user-sign">无怨，有悔</div>
+            <div class="section" v-show="bottomTabIndex == 3" v-if="userData" style="background: #f9f9f9">
+                <div class="scroll-wrapper">
+                    <div class="module-wrapper">
+                        <div id="my-avater-wrapper">
+                            <img :src="userData.avater" id="my-avater-img"/>
+                            <div id="user-info">
+                                <div id="user-name">吴时吴刻</div>
+                                <div id="user-sign">无怨，有悔</div>
+                            </div>
+                            <i class="iconfont iconfont-set"></i>
                         </div>
-                        <i class="iconfont iconfont-set"></i>
+                    </div>
+                    <div class="module-wrapper">
+                        <ul id="person-data">
+                            <li class="person-item">
+                                <span class="summary-data">10</span>
+                                <span class="summary-title">关注</span>
+                            </li>
+                            <li class="person-item">
+                                <span class="summary-data">25</span>
+                                <span class="summary-title">收藏</span>
+                            </li>
+                            <li class="person-item">
+                                <span class="summary-data">100</span>
+                                <span class="summary-title">粉丝</span>
+                            </li>
+                            <li class="person-item">
+                                <span class="summary-data">200万</span>
+                                <span class="summary-title">获赞</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="module-wrapper">
+                        <ul class="classify-wrapper">
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>浏览过的文章</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>浏览过的视频</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>观看过的影片</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="module-wrapper">
+                        <ul class="classify-wrapper">
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>收藏的文章</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>收藏的视频</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                            <li class="classify-item">
+                                <div class="title-wrapper">
+                                    <span>收藏的影片</span>
+                                    <i class="iconfont iconfont-jiantou"></i>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -328,7 +394,76 @@
                         }
                     }
                 }
+                .module-wrapper{
+                    &:first-child{
+                        margin-top: @big-margin;
+                    }
+                    margin: 0rem @big-margin @big-margin;
+                    padding: 1rem;
+                    border-radius: 1rem;
+                    background: #fff;
+                    #my-avater-wrapper{
+                        display: flex;
+                        align-items: center;
+                        #my-avater-img{
+                            height: 3rem;
+                            width: 3rem;
+                            border-radius: 50%;
+                            border: 2px solid @color-active;
+                        }
+                        #user-info{
+                            flex: 1;
+                            padding-left: @big-margin;
+                            #user-name{
+                                font-weight: bold;
+                            }
+                            #user-sign{
+                                padding-top: @small-margin;
+                                color:@color-icon;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                            }
+                        }
+                        .iconfont-set{
+                            color: @color-icon;
+                        }
+                    }
+                    #person-data{
+                        display: flex;
+                        .person-item{
+                            flex-direction: column;
+                            flex: 1;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            .summary-data{
+                                font-size: @article-title-font-size;
+                            }
+                            .summary-title{
+                                font-size: @article-footer-font-size;
+                                color: @article-footer-color;
+                            }
+                        }
+                    }
+                    .classify-wrapper{
+                        .classify-item{
+                            margin-bottom: @big-margin;
+                            border-bottom: 1px solid @border-color;
+                            &:last-child{
+                                border-bottom: none;
+                                margin-bottom: 0;
+                            }
+                            .title-wrapper{
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
 
+                                padding-bottom: @big-margin;
+                            }
+                        }
+                    }
+                }
             }
             .nav-wrapper{
                 display: flex;
@@ -498,37 +633,6 @@
             .loading-tip{
                 line-height: 10;
                 text-align: center;
-            }
-            #my-header{
-                height: 10rem;
-                padding: 1rem;
-                #my-avater-wrapper{
-                    display: flex;
-                    align-items: center;
-                    #my-avater-img{
-                        height: 3rem;
-                        width: 3rem;
-                        border-radius: 50%;
-                        border: 2px solid @color-active;
-                    }
-                    #user-info{
-                        flex: 1;
-                        padding-left: @big-margin;
-                        #user-name{
-                            font-weight: bold;
-                        }
-                        #user-sign{
-                            padding-top: @small-margin;
-                            color:@color-icon;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                    }
-                    .iconfont-set{
-                        color: @color-icon;
-                    }
-                }
             }
         }
         #footer-tab-wrapper{
