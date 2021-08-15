@@ -7,4 +7,5 @@ export default {
     getVideoList: "/service/toutiao/getVideoList",//获取视频列表
     getMovieList: "/service/toutiao/getMovieList",//获取视频列表
     getArticleDetail:"/service/toutiao/getArticleDetail",//获取文章详情
+    getArticleRecordList:"/service/toutiao-getway/getArticleRecordList",//获取文章浏览记录
 }

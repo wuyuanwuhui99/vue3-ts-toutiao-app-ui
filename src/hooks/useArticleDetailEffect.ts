@@ -3,8 +3,6 @@ import {useRoute} from "vue-router";
 import {
     getArticleService,
 } from "../service/articleDetailService"
-import BScroll from "better-scroll";
-import {ArticleInterface} from "@/types";
 
 export default ()=> {
     

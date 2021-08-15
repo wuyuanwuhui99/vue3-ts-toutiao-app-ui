@@ -45,4 +45,17 @@ export const  isMobile = ()=> {
     } else {
         return  false;//pc端
     }
-}
+};
+
+/**
+ * @author: wuwenqiang
+ * @description: 获取图片数量
+ * @date: 2020-06-27 21:29
+ */
+export const getImgHtml = (htmlStr:string,length:number,index:number) =>{
+    if (index == 3 && length > 4){
+        return `<div class="img-num">+${length-index-1}</div>${htmlStr}`;
+    }else{
+        return htmlStr;
+    }
+};

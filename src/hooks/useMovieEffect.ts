@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick} from "vue"
+import {ref,reactive,nextTick,Ref} from "vue"
 import {
     MovieInterface,
     MovieStateInterface,
@@ -23,8 +23,8 @@ export default ()=> {
         list:[],
         bscroll:null
     });
-    const movieNavScroll = ref<HTMLElement>();
-    const movieScrollWrapper =  ref<HTMLElement>();
+    const movieNavScroll:Ref<HTMLElement | null> = ref(null);
+    const movieScrollWrapper: Ref<HTMLElement | null> = ref(null);
     
     
     /**
@@ -37,14 +37,14 @@ export default ()=> {
             pageNum: 1,
             pageSize: 20,
             classify
-        }
+        };
         movieState.isEnd = false;
         movieState.activeClassify = classify;
-        movieState.list.splice(0, movieState.list.length)
-        const result:Array<MovieInterface> = await getMovieListService(movieState.params)
+        movieState.list.splice(0, movieState.list.length);
+        const result:Array<MovieInterface> = await getMovieListService(movieState.params);
         movieState.list.push(...result);
         nextTick(()=>{
-            movieState.bscroll.refresh()
+            movieState.bscroll.refresh();
         })
     }
 
@@ -54,9 +54,9 @@ export default ()=> {
      * @date: 2020-07-02 00:11
      */
     const useInitMovieEffect = async ()=>{
-        movieState.params.classify = "电影"
-        const result:Array<MovieInterface>  = await getMovieListService(movieState.params)
-        movieState.list.push(...result)
+        movieState.params.classify = "电影";
+        const result:Array<MovieInterface>  = await getMovieListService(movieState.params);
+        movieState.list.push(...result;
         movieState.isInit = true;
         movieState.loading = false;
         setTimeout(()=>{

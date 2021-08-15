@@ -1,22 +1,35 @@
 <template>
     <Suspense>
-        <keep-alive>
-            <router-view/>
-        </keep-alive>
+        <router-view #default="{Component}" v-if="isLogin">
+            <keep-alive>
+                <component :is="Component" v-if="$route.meta.keepAlive" />
+            </keep-alive>
+            <component :is="Component" v-if="!$route.meta.keepAlive" />
+        </router-view>
     </Suspense>
 </template>
 
 <script>
-    import {defineComponent,onMounted} from 'vue';
+    import {defineComponent,onMounted,ref} from 'vue';
     import {isMobile} from './utils'
-
+    import {getUserDataService} from "./service/appService";
     export default defineComponent({
-        setup() {
-            onMounted(()=>{
-                if(!isMobile()){
+        setup () {
+            const isLogin = ref(false);
+
+            onMounted(() => {
+                if (!isMobile()) {
                     document.querySelector('#app').style = 'width:400px;max-height:800px;height:100%;border:1px solid #eee;margin: 0 auto'
                 }
-            })
+            });
+
+            getUserDataService().then(() => {
+                isLogin.value = true;
+            });
+
+            return {
+                isLogin
+            }
         }
     })
 </script>

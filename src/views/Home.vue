@@ -142,13 +142,13 @@
                     </div>
                     <div class="module-wrapper">
                         <ul class="classify-wrapper">
-                            <li class="classify-item">
+                            <li class="classify-item" @click="goRouter('articleRecord')">
                                 <div class="title-wrapper">
                                     <span>浏览过的文章</span>
                                     <i class="iconfont iconfont-jiantou"></i>
                                 </div>
                             </li>
-                            <li class="classify-item">
+                            <li class="classify-item" @click="goRouter('articleRecord')">
                                 <div class="title-wrapper">
                                     <span>浏览过的视频</span>
                                     <i class="iconfont iconfont-jiantou"></i>
@@ -212,9 +212,10 @@
 <script lang="ts">
     import {defineComponent,ref} from 'vue';
     import useArticleEffect from "../hooks/useArticleEffect";
-    import {fomatTime} from "../utils";
+    import {fomatTime,getImgHtml} from "../utils";
     import useVideoEffect from "../hooks/useVideoEffect";
     import useMovieEffect from "../hooks/useMovieEffect";
+    import useMyEffect from "../hooks/useMyEffect";
     import store from "../store";
     export default defineComponent({
         name: 'Home',
@@ -230,6 +231,7 @@
             const articleEffect = useArticleEffect();
             const videoEffect = useVideoEffect();
             const movieEffect = useMovieEffect();
+            const myEffect = useMyEffect();
 
             /**
              * @author: wuwenqiang
@@ -245,15 +247,17 @@
                 }
             };
 
-            await articleEffect.useInitArticleEffect();
+            articleEffect.useInitArticleEffect();
 
             return {
                 tabBottomNav,
                 fomatTime,
+                getImgHtml,
                 userData:store.state.userData,
                 ...articleEffect,
                 ...videoEffect,
                 ...movieEffect,
+                ...myEffect,
                 bottomTabIndex
             }
         }
@@ -449,7 +453,7 @@
                     .classify-wrapper{
                         .classify-item{
                             margin-bottom: @big-margin;
-                            border-bottom: 1px solid @border-color;
+                            border-bottom: @border;
                             &:last-child{
                                 border-bottom: none;
                                 margin-bottom: 0;
@@ -515,7 +519,7 @@
                 flex-direction: column;
                 .article-item{
                     padding: @big-margin;
-                    border-bottom: 1px solid @border-color;
+                    border-bottom: @border;
                     .author-wrapper{
                         display: flex;
                         margin-top: @small-margin;
@@ -637,7 +641,7 @@
         }
         #footer-tab-wrapper{
             display: flex;
-            border-top: 1px solid @border-color;
+            border-top: @border;
             padding: @small-margin 0;
             .footer-tab-item{
                 display: flex;

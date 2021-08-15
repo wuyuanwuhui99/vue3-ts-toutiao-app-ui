@@ -199,6 +199,10 @@ export interface MovieParamsInterface {
     keyword?:string
 }
 
+export interface MyStateInterface{
+    articleRecordState: Array<boolean>,
+    articleRecordList:Array<ArticleInterface>,
+}
 
 
 

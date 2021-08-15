@@ -10,14 +10,20 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/articleDetail/:id',
         name: 'detail',
-        meta: {keepAlive: true},
+        meta: {keepAlive: false},
         component: () => import('../views/ArticleDetail.vue')
+    },
+    {
+        path: '/articleRecord',
+        name: 'articleRecord',
+        meta: {keepAlive: false},
+        component: () => import('../views/ArticleRecord.vue')
     }
-]
+];
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes
-})
+});
 
 export default router

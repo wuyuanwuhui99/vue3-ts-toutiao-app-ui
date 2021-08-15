@@ -16,7 +16,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
     import {defineComponent,toRefs} from 'vue';
     import useArticleDetailEffect from "../hooks/useArticleDetailEffect";
     import {fomatTime} from "../utils";
@@ -74,7 +74,7 @@
                     }
                 }
                 #button-focus{
-                    border:1px solid @border-color;
+                    border:@border;
                     border-radius: @border-raduis;
                     padding:0.3rem @small-margin;
                     color: @article-footer-color;

@@ -4,9 +4,9 @@ import {
     ArticleChannelInterface,
 } from "../types";
 import {
-    getUserDataService,
-    getFavoriteChannelsListService, getArticleListService
-} from "../service/homeService"
+    getFavoriteChannelsListService,
+    getArticleListService
+} from "../service/homeService";
 import BScroll from "better-scroll";
 import { useRouter } from "vue-router";
 export default ()=> {
@@ -29,38 +29,25 @@ export default ()=> {
     
     /**
      * @author: wuwenqiang
-     * @description: 获取图片数量
-     * @date: 2020-06-27 21:29
-     */
-    const getImgHtml = (htmlStr:string,length:number,index:number) =>{
-        if (index == 3 && length > 4){
-            return `<div class="img-num">+${length-index-1}</div>${htmlStr}`
-        }else{
-            return htmlStr
-        }
-    };
-    
-    /**
-     * @author: wuwenqiang
      * @description: 切换频道
      * @date: 2020-06-27 21:29
      */
     const tabArticleChannel = async (navItem: ArticleChannelInterface) => {
-        articleState.activeId = navItem.id
+        articleState.activeId = navItem.id;
         articleState.params = {
             pageNum: 1,
             pageSize: 20,
             channelId: navItem.channelId,
-        }
+        };
         articleState.isEnd = false;
-        articleState.list.splice(0, articleState.list.length)
-        if (navItem.channelName == "西瓜视频") articleState.params.type = "video"
-        let res = await getArticleListService(articleState.params)
-        articleState.list.push(...res)
+        articleState.list.splice(0, articleState.list.length);
+        if (navItem.channelName == "西瓜视频") articleState.params.type = "video";
+        let res = await getArticleListService(articleState.params);
+        articleState.list.push(...res);
         nextTick(()=>{
-            articleState.bscroll.refresh()
+            articleState.bscroll.refresh();
         })
-    }
+    };
     
     /**
      * @author: wuwenqiang
@@ -68,12 +55,11 @@ export default ()=> {
      * @date: 2020-06-30 23:28
      */
     const useInitArticleEffect = async ()=>{
-        await getUserDataService();//获取用户信息
         const res = await getFavoriteChannelsListService();//获取频道信息
-        articleState.channels.push(...res)
+        articleState.channels.push(...res);
         let {channelId,id}= articleState.channels.find((item: ArticleChannelInterface) => item.status == 1);
         articleState.params.channelId = channelId;
-        articleState.activeId = id
+        articleState.activeId = id;
         const reuslt = await getArticleListService(articleState.params).finally(()=>{
             articleState.isInit = true
         });
@@ -93,13 +79,13 @@ export default ()=> {
             });
             articleState.bscroll.on('scrollEnd', async () => {
                 if (articleState.bscroll.y <= (articleState.bscroll.maxScrollY + 100) && !articleState.isEnd && !articleState.loading) {
-                    articleState.params.pageNum++
+                    articleState.params.pageNum++;
                     let result = await getArticleListService(articleState.params).finally(()=>{
                         articleState.isInit = true
                     });
                     if(result.length == 0){
                         articleState.isEnd = true;
-                        return
+                        return;
                     }else{
                         articleState.isEnd = false;
                     }
@@ -109,17 +95,16 @@ export default ()=> {
                     });
                 }
             })
-        },500)
+        },500);
     };
     
-    const router = useRouter()
+    const router = useRouter();
     
     const goArticleDetail = (id:number)=>{
-        router.push(`/articleDetail/${id}`)
-    }
+        router.push(`/articleDetail/${id}`);
+    };
     
     return {
-        getImgHtml,
         articleState,
         tabArticleChannel,
         articleNavScroll,
