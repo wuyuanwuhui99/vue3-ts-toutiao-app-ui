@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconfont-has-collection{
+  content: "\e62a";
+}
+
 .iconfont-set:before{
   content: "\e605";
 }
@@ -53,7 +57,7 @@
   content: "\e604";
 }
 
-.iconfont-collection:before {
+.iconfont-no-collection:before {
   content: "\e629";
 }
 

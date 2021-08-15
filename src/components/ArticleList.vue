@@ -18,14 +18,15 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent} from "vue";
+    import {defineComponent,PropType} from "vue";
     import {fomatTime,getImgHtml} from "../utils";
     import { useRouter } from "vue-router";
+    import {ArticleInterface} from '@/types'
     export default defineComponent({
         name: 'ArticleList',
         props:{
             articleList:{
-                type:Array,
+                type:Array as PropType<ArticleInterface[]>,
                 required:true
             }
         },

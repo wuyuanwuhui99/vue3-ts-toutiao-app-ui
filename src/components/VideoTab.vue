@@ -24,7 +24,12 @@
                             <img class="avater" v-if="item.authorInfo.avatarUrl" :src="item.authorInfo.avatarUrl"/>
                             <div class="sub-title" v-if="item.authorInfo.authorDesc">{{item.authorInfo.authorDesc}}</div>
                             <span class="video-time">{{fomatTime(item.publishTime)}}</span>
-                            <span class="iconfont iconfont-more"></span>
+                            <span class="iconfont iconfont-more" @click.stop="showHandle(item,index)"></span>
+                            <div class="handle-wrapper" v-if="showHandleIndex == index">
+                                <span class="iconfont iconfont-handle iconfont-like" @click.stop="handleLike"></span>
+                                <span class="iconfont iconfont-handle" :class="item.isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
+                                <span class="iconfont iconfont-handle iconfont-comment"></span>
+                            </div>
                         </div>
                     </li>
                 </ul>
@@ -137,6 +142,23 @@
                     display: flex;
                     margin-top: @small-margin;
                     align-items: center;
+                    position: relative;
+                    .handle-wrapper{
+                        position: absolute;
+                        z-index: 1;
+                        background: #666;
+                        padding: @small-margin;
+                        right: 2rem;
+                        border-radius: @border-raduis;
+                        .iconfont-handle{
+                            margin-left: @big-margin;
+                            color:#fff;
+                            font-size: @article-title-font-size;
+                            &:first-child{
+                                margin-left:0;
+                            }
+                        }
+                    }
                     .avater{
                         width: 2rem;
                         height: 2rem;

@@ -13,6 +13,7 @@
     import {defineComponent,onMounted,ref} from 'vue';
     import {isMobile} from './utils'
     import {getUserDataService} from "./service/appService";
+    import emitter from "./utils/emitter";
     export default defineComponent({
         setup () {
             const isLogin = ref(false);
@@ -25,6 +26,10 @@
 
             getUserDataService().then(() => {
                 isLogin.value = true;
+            });
+
+            document.body.addEventListener("click",()=>{
+                emitter.$emit("bodyClick")
             });
 
             return {

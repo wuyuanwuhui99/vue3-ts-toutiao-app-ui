@@ -99,6 +99,7 @@ export interface VideoInterface {
     createTime:string,//创建时间,
     updateTime:string//更新时间,
     authorInfo:AuthorInfo,//用户信息
+    isFavorite?:boolean,//是否已经收藏
 }
 
 export interface AuthorInfo {
@@ -145,6 +146,7 @@ export interface VideoStateInterface {
     channels:Array<VideoChannelInterface>,
     list:Array<VideoInterface>,
     bscroll:any
+    showHandleIndex:number,//显示点赞评论收藏操作框的下标
 }
 
 export interface MovieStateInterface {
