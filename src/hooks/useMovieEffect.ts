@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick,Ref} from "vue"
+import {ref,reactive,nextTick,Ref,toRefs} from "vue"
 import {
     MovieInterface,
     MovieStateInterface,
@@ -46,7 +46,7 @@ export default ()=> {
         nextTick(()=>{
             movieState.bscroll.refresh();
         })
-    }
+    };
 
     /**
      * @author: wuwenqiang
@@ -86,7 +86,7 @@ export default ()=> {
     
     
     return {
-        movieState,
+        ...toRefs(movieState),
         tabMovieChannel,
         movieNavScroll,
         movieScrollWrapper,

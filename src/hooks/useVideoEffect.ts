@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick} from "vue"
+import {ref,reactive,nextTick,toRefs} from "vue"
 import {
     VideoInterface,
     VideoChannelInterface,
@@ -41,6 +41,7 @@ export default ()=> {
      * @date: 2020-06-27 21:29
      */
     const tabVideoChannel = async (navItem: VideoChannelInterface) => {
+        videoState.activeChannelId = navItem.channelId;
         videoState.params = {
             pageNum: 1,
             pageSize: 20,
@@ -96,7 +97,7 @@ export default ()=> {
     
     
     return {
-        videoState,
+        ...toRefs(videoState),
         tabVideoChannel,
         videoNavScroll,
         videoScrollWrapper,

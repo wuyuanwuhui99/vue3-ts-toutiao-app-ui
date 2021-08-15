@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick} from "vue"
+import {ref,reactive,nextTick,toRefs} from "vue"
 import {
     ArticleStateInterface,
     ArticleChannelInterface,
@@ -105,7 +105,7 @@ export default ()=> {
     };
     
     return {
-        articleState,
+        ...toRefs(articleState),
         tabArticleChannel,
         articleNavScroll,
         articleScrollWrapper,
