@@ -33,19 +33,19 @@
             </div>
             <div class="module-wrapper">
                 <ul class="classify-wrapper">
-                    <li class="classify-item" @click="goRouter('articleRecord')">
+                    <li class="classify-item" @click="goRouter('article')">
                         <div class="title-wrapper">
                             <span>浏览过的文章</span>
                             <i class="iconfont iconfont-jiantou"></i>
                         </div>
                     </li>
-                    <li class="classify-item" @click="goRouter('articleRecord')">
+                    <li class="classify-item" @click="goRouter('video')">
                         <div class="title-wrapper">
                             <span>浏览过的视频</span>
                             <i class="iconfont iconfont-jiantou"></i>
                         </div>
                     </li>
-                    <li class="classify-item">
+                    <li class="classify-item" @click="goRouter('movie')">
                         <div class="title-wrapper">
                             <span>观看过的影片</span>
                             <i class="iconfont iconfont-jiantou"></i>

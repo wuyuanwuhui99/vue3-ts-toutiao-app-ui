@@ -14,10 +14,10 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/ArticleDetail.vue')
     },
     {
-        path: '/articleRecord',
-        name: 'articleRecord',
+        path: '/recordList',
+        name: 'recordList',
         meta: {keepAlive: false},
-        component: () => import('../views/ArticleRecord.vue')
+        component: () => import('../views/RecordList.vue')
     }
 ];
 

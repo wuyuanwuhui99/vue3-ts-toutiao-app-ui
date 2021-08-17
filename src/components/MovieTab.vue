@@ -17,7 +17,7 @@
                     <li v-for="item,index in list" class="movie-item" :key="'movie-item'+index">
                         <div class="movie-img-wrapper">
                             <img class="movie-img" :src="item.localImg"/>
-                            <span class="movie-state" v-if="item.viewingState">{{item.viewingState}}</span>
+                            <span class="movie-state" v-if="item.viewingState">{{item.viewingState.replace(/\s/g,"")}}</span>
                         </div>
 
                         <div class="movie-name">{{item.movieName}}</div>

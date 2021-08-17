@@ -7,7 +7,7 @@ export default {
     getVideoList: "/service/toutiao/getVideoList",//获取视频列表
     getMovieList: "/service/toutiao/getMovieList",//获取视频列表
     getArticleDetail:"/service/toutiao/getArticleDetail",//获取文章详情
-    getArticleRecordList:"/service/toutiao-getway/getArticleRecordList",//获取文章浏览记录
+    getRecordList:"/service/toutiao-getway/getRecordList",//获取文章浏览记录
     isFavorite:"/service/toutiao-getway/isFavorite",//获取文章浏览记录
     getFavorite:"/service/toutiao-getway/getFavorite",//获取文章浏览记录或视频播放记录或电影观看记录
 }

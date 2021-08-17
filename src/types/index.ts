@@ -206,5 +206,8 @@ export interface MyStateInterface{
     articleRecordList:Array<ArticleInterface>,
 }
 
+export type MixinInterface = ArticleInterface|MovieInterface|VideoInterface
+
+
 
 

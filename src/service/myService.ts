@@ -1,8 +1,8 @@
 import axios, {AxiosResponse} from "axios";
 import api from "../api";
-import {ArticleInterface} from "../types";
+import {MixinInterface} from "../types";
 
-export const getArticleRecordService = () => {
-    return axios.get(api.getArticleRecordList).then((res:AxiosResponse<Array<ArticleInterface>>)=>res.data);
+export const getRecordListService = (type:string) => {
+    return axios.get(api.getRecordList,{params:{type}}).then((res:AxiosResponse<Array<MixinInterface>>)=>res.data);
 }
 
