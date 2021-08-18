@@ -6,11 +6,9 @@ import {
 } from "@/types";
 import {
     getVideoListService,
-    getVideoFavoriteChannelsService,
-    isFavoriteService
+    getVideoFavoriteChannelsService
 } from "../service/videoService"
 import BScroll from "better-scroll";
-import emitter from "../utils/emitter";
 
 export default ()=> {
     
@@ -98,41 +96,10 @@ export default ()=> {
         },100)
     };
     
-    /**
-     * @author: wuwenqiang
-     * @description: 显示点赞评论收藏的操作框
-     * @date: 2021-08-15 16:20
-     */
-    const showHandle = (item:VideoInterface,index:number)=>{
-        isFavoriteService("video",index).then((res)=>{
-            item.isFavorite = res;
-        });
-        videoState.showHandleIndex = index;
-    };
-    
-    /**
-     * @author: wuwenqiang
-     * @description: 点击了其他地方，因此点赞评论操作框
-     * @date: 2021-08-15 16:20
-     */
-    emitter.$on("bodyClick",()=>{
-        videoState.showHandleIndex = -1;
-    });
-    
-    /**
-     * @author: wuwenqiang
-     * @description: 点赞
-     * @date: 2021-08-15 16:20
-     */
-    const handleLike =(id:number)=>{
-    
-    };
     
     return {
         ...toRefs(videoState),
-        handleLike,
         tabVideoChannel,
-        showHandle,
         videoNavScroll,
         videoScrollWrapper,
         useInitVideoEffect

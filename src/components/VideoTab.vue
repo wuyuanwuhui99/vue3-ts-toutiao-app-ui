@@ -13,26 +13,7 @@
         <div ref="videoScrollWrapper" class="scroll-wrapper">
             <div class="scroll-container">
                 <div class="loading-box" v-if="!isInit"></div>
-                <ul class="articles">
-                    <li v-for="item,index in list" class="article-item" :key="'video-item'+index">
-                        <div class="video-img-wrapper">
-                            <div class="main-title">{{item.title}}</div>
-                            <img :src="item.img" class="video-img">
-                            <i class="iconfont iconfont-play"></i>
-                        </div>
-                        <div class="author-wrapper">
-                            <img class="avater" v-if="item.authorInfo.avatarUrl" :src="item.authorInfo.avatarUrl"/>
-                            <div class="sub-title" v-if="item.authorInfo.authorDesc">{{item.authorInfo.authorDesc}}</div>
-                            <span class="video-time">{{fomatTime(item.publishTime)}}</span>
-                            <span class="iconfont iconfont-more" @click.stop="showHandle(item,index)"></span>
-                            <div class="handle-wrapper" v-if="showHandleIndex == index">
-                                <span class="iconfont iconfont-handle iconfont-like" @click.stop="handleLike"></span>
-                                <span class="iconfont iconfont-handle" :class="item.isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
-                                <span class="iconfont iconfont-handle iconfont-comment"></span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
+                <VideoList :list="list"></VideoList>
                 <template v-if="list.length>0">
                     <div class="loading-tip" v-if="isEnd">已经到底了</div>
                     <div class="icon-loading" v-else></div>
@@ -46,8 +27,10 @@
     import {defineComponent} from 'vue';
     import useVideoEffect from "../hooks/useVideoEffect";
     import {fomatTime} from "../utils";
+    import VideoList from "./VideoList.vue";
     export default defineComponent({
         name: 'VideoTab',
+        components:{VideoList},
         setup(){
             const videoEffect = useVideoEffect();
             videoEffect.useInitVideoEffect();

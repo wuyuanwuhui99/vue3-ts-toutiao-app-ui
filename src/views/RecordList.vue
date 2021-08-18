@@ -17,7 +17,6 @@
         name: 'ArticleRecord',
         components:{ArticleList,ClassifyHeader},
         async setup () {
-            debugger
             const route:any = useRoute();
             const type:string = route.query.type;
             const articleRecordList = await getRecordListService(type);

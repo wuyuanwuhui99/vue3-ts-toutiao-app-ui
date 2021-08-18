@@ -100,6 +100,7 @@ export interface VideoInterface {
     updateTime:string//更新时间,
     authorInfo:AuthorInfo,//用户信息
     isFavorite?:boolean,//是否已经收藏
+    isLike?:boolean,//是否点过赞
 }
 
 export interface AuthorInfo {
@@ -199,11 +200,6 @@ export interface MovieParamsInterface {
     label?:string,
     director?:string,//导员
     keyword?:string
-}
-
-export interface MyStateInterface{
-    articleRecordState: Array<boolean>,
-    articleRecordList:Array<ArticleInterface>,
 }
 
 export type MixinInterface = ArticleInterface|MovieInterface|VideoInterface

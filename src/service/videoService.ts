@@ -11,13 +11,5 @@ export const getVideoListService = (params:VideoParamsInterface) => {
         params
     }).then((res:AxiosResponse<Array<VideoInterface>>)=>res.data);
 };
-export const isFavoriteService = (type:string,id:number|string) => {
-    return axios.get(api.isFavorite, {
-        params:{
-            type,
-            id
-        }
-    }).then((res:AxiosResponse<boolean>)=>res.data);
-};
 
 
