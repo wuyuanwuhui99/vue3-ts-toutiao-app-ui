@@ -13,8 +13,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.iconfont-has-collection{
+.iconfont-has-collection:before{
   content: "\e62a";
+  color: #ff9900;
 }
 
 .iconfont-set:before{
@@ -63,6 +64,11 @@
 
 .iconfont-like:before {
   content: "\e61c";
+}
+
+.iconfont-like-active:before {
+  content: "\e60c";
+  color: #ff9900;
 }
 
 .iconfont-views:before {

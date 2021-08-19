@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick,toRefs} from "vue"
+import {ref,reactive,nextTick,toRefs,Ref} from "vue"
 import {
     VideoInterface,
     VideoChannelInterface,
@@ -7,7 +7,7 @@ import {
 import {
     getVideoListService,
     getVideoFavoriteChannelsService
-} from "../service/videoService"
+} from "../service/videoService";
 import BScroll from "better-scroll";
 
 export default ()=> {
@@ -32,7 +32,7 @@ export default ()=> {
         list:[],
         bscroll:null
     });
-    const videoNavScroll = ref<HTMLElement>();
+    const videoNavScroll:Ref<HTMLElement | null> = ref(null);
     const videoScrollWrapper =  ref<HTMLElement>();
     
     
@@ -72,14 +72,14 @@ export default ()=> {
         videoState.loading = false;
         videoState.activeChannelId = videoState.channels[0].channelId;
         setTimeout(()=>{
-            new BScroll(videoNavScroll.value, {
+            new BScroll(videoNavScroll.value as HTMLElement, {
                 probeType: 1,
                 click: true,
                 scrollX: true,
                 scrollY: false,
                 eventPassthrough: "vertical"
             });
-            videoState.bscroll = new BScroll(videoScrollWrapper.value, {
+            videoState.bscroll = new BScroll(videoScrollWrapper.value  as HTMLElement, {
                 probeType: 1,
                 click: true,
             });

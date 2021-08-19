@@ -56,18 +56,18 @@ export default ()=> {
     const useInitMovieEffect = async ()=>{
         movieState.params.classify = "电影";
         const result:Array<MovieInterface>  = await getMovieListService(movieState.params);
-        movieState.list.push(...result;
+        movieState.list.push(...result);
         movieState.isInit = true;
         movieState.loading = false;
         setTimeout(()=>{
-            new BScroll(movieNavScroll.value, {
+            new BScroll(movieNavScroll.value as HTMLElement, {
                 probeType: 1,
                 click: true,
                 scrollX: true,
                 scrollY: false,
                 eventPassthrough: "vertical"
             });
-            movieState.bscroll = new BScroll(movieScrollWrapper.value, {
+            movieState.bscroll = new BScroll(movieScrollWrapper.value as HTMLElement, {
                 probeType: 1,
                 click: true
             });

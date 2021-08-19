@@ -22,5 +22,5 @@ export const insertLikeService = (type:string,id:number|string) => {
 };
 
 export const deleteLikeService = (type:string,id:number|string) => {
-    return axios.delete(api.deleteFavorite, {params:{type,id}}).then((res:AxiosResponse<number>)=>res.data);
+    return axios.delete(api.deleteLike, {params:{type,id}}).then((res:AxiosResponse<number>)=>res.data);
 };

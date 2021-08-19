@@ -1,7 +1,7 @@
 import {ref,reactive,nextTick,toRefs} from "vue"
 import {
     ArticleStateInterface,
-    ArticleChannelInterface,
+    ArticleChannelInterface, ArticleInterface,
 } from "../types";
 import {
     getFavoriteChannelsListService,
@@ -24,8 +24,8 @@ export default ()=> {
         list:[],
         bscroll:null
     });
-    const articleNavScroll = ref<HTMLElement>();
-    const articleScrollWrapper = ref<HTMLElement>();
+    const articleNavScroll = ref<HTMLElement | null>(null);
+    const articleScrollWrapper = ref<HTMLElement | null>(null);
     
     /**
      * @author: wuwenqiang
@@ -57,7 +57,8 @@ export default ()=> {
     const useInitArticleEffect = async ()=>{
         const res = await getFavoriteChannelsListService();//获取频道信息
         articleState.channels.push(...res);
-        let {channelId,id}= articleState.channels.find((item: ArticleChannelInterface) => item.status == 1);
+        const activeChannel = articleState.channels.find((item: ArticleChannelInterface) => item.status == 1);
+        const {channelId,id} = activeChannel as ArticleChannelInterface;
         articleState.params.channelId = channelId;
         articleState.activeId = id;
         const reuslt = await getArticleListService(articleState.params).finally(()=>{
@@ -65,7 +66,7 @@ export default ()=> {
         });
         articleState.list.push(...reuslt);
         setTimeout(()=>{
-            new BScroll(articleNavScroll.value, {
+            new BScroll(articleNavScroll.value as HTMLElement, {
                 probeType: 1,
                 click: true,
                 scrollX: true,
@@ -73,7 +74,7 @@ export default ()=> {
                 eventPassthrough: "vertical"
             });
             
-            articleState.bscroll = new BScroll(articleScrollWrapper.value, {
+            articleState.bscroll = new BScroll(articleScrollWrapper.value as HTMLElement, {
                 probeType: 1,
                 click: true,
             });

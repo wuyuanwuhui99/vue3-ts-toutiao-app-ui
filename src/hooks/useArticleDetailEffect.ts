@@ -8,7 +8,7 @@ export default ()=> {
     
     const articleDetailState = reactive({articleDetail:{}});
     
-    const route = useRoute();
+    const route:any = useRoute();
     
     const useInitArticleDetailEffect = async () => {
         articleDetailState.articleDetail = await getArticleService(route.params.id)

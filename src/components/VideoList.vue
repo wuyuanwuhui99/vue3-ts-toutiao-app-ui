@@ -12,7 +12,7 @@
                 <span class="video-time">{{fomatTime(item.publishTime)}}</span>
                 <span class="iconfont iconfont-more" @click.stop="showHandle(item,index)"></span>
                 <div class="handle-wrapper" v-if="showHandleIndex == index">
-                    <span class="iconfont iconfont-handle iconfont-like" @click.stop="handleLike"></span>
+                    <span class="iconfont iconfont-handle iconfont-like" :class="item.isLike?'iconfont-like-active':'iconfont-like'" @click.stop="handleLike"></span>
                     <span class="iconfont iconfont-handle" @click.stop="handleFavorite" :class="item.isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
                     <span class="iconfont iconfont-handle iconfont-comment"></span>
                 </div>
@@ -52,10 +52,7 @@
              * @date: 2021-08-15 16:20
              */
             const showHandle = (item:VideoInterface,index:number)=>{
-                isFavoriteService("video",item.id).then(res=> {
-                    console.log(res);
-                    item.isFavorite = res > 0
-                });
+                isFavoriteService("video",item.id).then(res=> item.isFavorite = res > 0);
                 isLikeService("video",item.id).then(res => item.isLike = res > 0);
                 showHandleIndex.value = index;
             };
@@ -68,14 +65,9 @@
             const handleLike =()=>{
                 const activeItem:VideoInterface = videoList[showHandleIndex.value];
                 if(activeItem.isLike){
-                    deleteLikeService("video",activeItem.id).then(res=>{
-                        console.log(res)
-                        if(res > 0)  activeItem.isLike = false;
-                    });
+                    deleteLikeService("video",activeItem.id).then(res=> activeItem.isLike = !(res > 0));
                 }else{
-                    insertLikeService("video",activeItem.id).then(res=>{
-                        if(res > 0)  activeItem.isLike = true;
-                    });
+                    insertLikeService("video",activeItem.id).then(res=>activeItem.isLike = res > 0);
                 }
             };
 
@@ -87,7 +79,9 @@
             const handleFavorite = ()=>{
                 const activeItem = videoList[showHandleIndex.value];
                 if(activeItem.isFavorite){
-
+                    deleteFavoriteService("video",activeItem.id).then(res=> activeItem.isFavorite = !(res > 0));
+                }else{
+                    insertFavoriteService("video",activeItem.id).then(res=> activeItem.isFavorite = res > 0);
                 }
             };
 
@@ -106,7 +100,7 @@
                 emitter.$off("bodyClick",handleVideo)
             });
 
-            return {showHandle,handleLike,showHandleIndex,fomatTime,videoList}
+            return {showHandle,handleLike,showHandleIndex,fomatTime,videoList,handleFavorite}
         }
     })
 </script>
