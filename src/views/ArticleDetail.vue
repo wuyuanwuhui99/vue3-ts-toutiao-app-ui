@@ -8,7 +8,7 @@
                     <div id="acticle-user">{{articleDetail.authorInfo && articleDetail.authorInfo.name ? articleDetail.authorInfo.name: articleDetail.authorId}}</div>
                     <div v-if="articleDetail.createTime">{{fomatTime(articleDetail.createTime)}}</div>
                 </div>
-                <div id="button-focus">关注</div>
+                <div id="button-focus" :class="{'button-focus-active':isFocus}" @click="useHandleFocus">{{isFocus?"已关注":"关注"}}</div>
             </div>
             <article id="article-text" v-html="articleDetail.content"></article>
         </div>
@@ -23,12 +23,12 @@
     export default defineComponent({
         name: 'ArticleDetail',
         setup() {
-            const {articleDetailState,useInitArticleDetailEffect} = useArticleDetailEffect();
+            const articleState = useArticleDetailEffect();
 
-            useInitArticleDetailEffect()
+            articleState.useInitArticleDetailEffect();
 
             return {
-                ...toRefs(articleDetailState),
+                ...articleState,
                 fomatTime
             }
         }
@@ -78,6 +78,10 @@
                     border-radius: @border-raduis;
                     padding:0.3rem @small-margin;
                     color: @article-footer-color;
+                    &.button-focus-active{
+                        color: @color-active;
+                        border-color: @color-active;
+                    }
                 }
             }
         }

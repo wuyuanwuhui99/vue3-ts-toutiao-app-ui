@@ -15,4 +15,7 @@ export default {
     insertLike:"/service/toutiao-getway/insertLike",//插入点赞
     deleteLike:"/service/toutiao-getway/deleteLike",//删除点赞
     getFavorite:"/service/toutiao-getway/getFavorite",//获取文章浏览记录或视频播放记录或电影观看记录
+    isFocus:"/service/toutiao-getway/isFocus",//查询是否已经关注
+    insertFocus:"/service/toutiao-getway/insertFocus",//新增关注
+    deleteFocus:"/service/toutiao-getway/deleteFocus",//取消关注
 }
