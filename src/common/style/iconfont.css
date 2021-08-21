@@ -13,6 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconfont-arrow:before{
+  content: "\e615";
+}
+
+.iconfont-arrow{
+  color: #888;
+  font-size:0.5rem;
+  padding: 0 0.3rem;
+}
+
 .iconfont-has-collection:before{
   content: "\e62a";
   color: #ff9900;

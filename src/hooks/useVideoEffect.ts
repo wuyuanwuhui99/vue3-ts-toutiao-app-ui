@@ -41,7 +41,7 @@ export default ()=> {
      * @description: 切换频道
      * @date: 2020-06-27 21:29
      */
-    const tabVideoChannel = async (navItem: VideoChannelInterface) => {
+    const useTabVideoChannel = async (navItem: VideoChannelInterface) => {
         videoState.activeChannelId = navItem.channelId;
         videoState.params = {
             pageNum: 1,
@@ -62,7 +62,7 @@ export default ()=> {
      * @description: 初始化视频方法
      * @date: 2020-07-02 00:11
      */
-    const useInitVideoEffect = async ()=>{
+    const useInitVideo = async ()=>{
         let res = await getVideoFavoriteChannelsService();
         videoState.channels.push(...res as Array<VideoChannelInterface>);
         videoState.params.channelId = videoState.channels[0].channelId;
@@ -99,9 +99,9 @@ export default ()=> {
     
     return {
         ...toRefs(videoState),
-        tabVideoChannel,
+        useTabVideoChannel,
         videoNavScroll,
         videoScrollWrapper,
-        useInitVideoEffect
+        useInitVideo
     }
 }

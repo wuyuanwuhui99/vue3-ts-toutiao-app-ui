@@ -9,7 +9,7 @@
     import {defineComponent,PropType} from "vue";
     import {useRouter} from "vue-router";
     export default defineComponent({
-        name: 'ClassifyHeader',
+        name: 'ClassifyHeaderComponent',
         props:{
             classifyTitle:{
                 type:String as PropType<string>,

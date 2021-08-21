@@ -1,23 +1,79 @@
 <template>
-    <div class="section" v-show="bottomTabIndex == 1">
-        <div class="nav-wrapper">
-            <div class="nav-list-scroll" ref="videoNavScroll">
-                <ul class="nav-list">
-                    <li class="nav-item" @click="tabVideoChannel(item)"  :class="{'nav-item-active':activeChannelId == item.channelId}" v-for="item,index in channels" :key="'nav-item-video'+index">
-                        {{item.channelName}}
+    <div class="section" style="background: #f9f9f9">
+        <div class="scroll-wrapper">
+            <div class="module-wrapper">
+                <div id="my-avater-wrapper">
+                    <img :src="userData.avater" id="my-avater-img"/>
+                    <div id="user-info">
+                        <div id="user-name">吴时吴刻</div>
+                        <div id="user-sign">无怨，有悔</div>
+                    </div>
+                    <i class="iconfont iconfont-set"></i>
+                </div>
+            </div>
+            <div class="module-wrapper">
+                <ul id="person-data">
+                    <li class="person-item">
+                        <span class="summary-data">10</span>
+                        <span class="summary-title">关注</span>
+                    </li>
+                    <li class="person-item">
+                        <span class="summary-data">25</span>
+                        <span class="summary-title">收藏</span>
+                    </li>
+                    <li class="person-item">
+                        <span class="summary-data">100</span>
+                        <span class="summary-title">粉丝</span>
+                    </li>
+                    <li class="person-item">
+                        <span class="summary-data">200万</span>
+                        <span class="summary-title">获赞</span>
                     </li>
                 </ul>
             </div>
-            <i class="iconfont iconfont-search"></i>
-        </div>
-        <div ref="videoScrollWrapper" class="scroll-wrapper">
-            <div class="scroll-container">
-                <div class="loading-box" v-if="!isInit"></div>
-                <VideoList :list="list"></VideoList>
-                <template v-if="list.length>0">
-                    <div class="loading-tip" v-if="isEnd">已经到底了</div>
-                    <div class="icon-loading" v-else></div>
-                </template>
+            <div class="module-wrapper">
+                <ul class="classify-wrapper">
+                    <li class="classify-item" @click="goRouter('article')">
+                        <div class="title-wrapper">
+                            <span>浏览过的文章</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                    <li class="classify-item" @click="goRouter('video')">
+                        <div class="title-wrapper">
+                            <span>浏览过的视频</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                    <li class="classify-item" @click="goRouter('movie')">
+                        <div class="title-wrapper">
+                            <span>观看过的影片</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="module-wrapper">
+                <ul class="classify-wrapper">
+                    <li class="classify-item">
+                        <div class="title-wrapper">
+                            <span>收藏的文章</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                    <li class="classify-item">
+                        <div class="title-wrapper">
+                            <span>收藏的视频</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                    <li class="classify-item">
+                        <div class="title-wrapper">
+                            <span>收藏的影片</span>
+                            <i class="iconfont iconfont-jiantou"></i>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -25,18 +81,17 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import useVideoEffect from "../hooks/useVideoEffect";
+    import useMyEffect from "../hooks/useMyEffect";
     import {fomatTime} from "../utils";
-    import VideoList from "./VideoList.vue";
+    import state from "../store/state";
     export default defineComponent({
-        name: 'VideoTab',
-        components:{VideoList},
+        name: 'MyTabComponent',
         setup(){
-            const videoEffect = useVideoEffect();
-            videoEffect.useInitVideoEffect();
+            const myEffect = useMyEffect();
             return {
                 fomatTime,
-                ...videoEffect
+                userData:state.userData,
+                ...myEffect
             }
         }
     })
@@ -56,17 +111,74 @@
             &::-webkit-scrollbar{
                 display: none;
             }
-            .scroll-container{
-                min-height: 100%;
-                position: relative;
-                .loading-box{
-                    z-index: 1;
-                    width: 100%;
-                    height: 100%;
-                    background-image: url("../assets/icon-loading.gif");
-                    background-repeat: no-repeat;
-                    background-position: center center;
-                    position: absolute;
+            .module-wrapper{
+                &:first-child{
+                    margin-top: @big-margin;
+                }
+                margin: 0rem @big-margin @big-margin;
+                padding: 1rem;
+                border-radius: 1rem;
+                background: #fff;
+                #my-avater-wrapper{
+                    display: flex;
+                    align-items: center;
+                    #my-avater-img{
+                        height: 3rem;
+                        width: 3rem;
+                        border-radius: 50%;
+                        border: 2px solid @color-active;
+                    }
+                    #user-info{
+                        flex: 1;
+                        padding-left: @big-margin;
+                        #user-name{
+                            font-weight: bold;
+                        }
+                        #user-sign{
+                            padding-top: @small-margin;
+                            color:@color-icon;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                        }
+                    }
+                    .iconfont-set{
+                        color: @color-icon;
+                    }
+                }
+                #person-data{
+                    display: flex;
+                    .person-item{
+                        flex-direction: column;
+                        flex: 1;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .summary-data{
+                            font-size: @article-title-font-size;
+                        }
+                        .summary-title{
+                            font-size: @article-footer-font-size;
+                            color: @article-footer-color;
+                        }
+                    }
+                }
+                .classify-wrapper{
+                    .classify-item{
+                        margin-bottom: @big-margin;
+                        border-bottom: @border;
+                        &:last-child{
+                            border-bottom: none;
+                            margin-bottom: 0;
+                        }
+                        .title-wrapper{
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+
+                            padding-bottom: @big-margin;
+                        }
+                    }
                 }
             }
         }
@@ -125,23 +237,6 @@
                     display: flex;
                     margin-top: @small-margin;
                     align-items: center;
-                    position: relative;
-                    .handle-wrapper{
-                        position: absolute;
-                        z-index: 1;
-                        background: #666;
-                        padding: @small-margin;
-                        right: 2rem;
-                        border-radius: @border-raduis;
-                        .iconfont-handle{
-                            margin-left: @big-margin;
-                            color:#fff;
-                            font-size: @article-title-font-size;
-                            &:first-child{
-                                margin-left:0;
-                            }
-                        }
-                    }
                     .avater{
                         width: 2rem;
                         height: 2rem;

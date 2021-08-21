@@ -2,10 +2,10 @@
     <div id="home">
 
         <div id="tab-wrapper">
-            <ArticleTab v-show="bottomTabIndex == 0"></ArticleTab>
-            <VideoTab v-show="bottomTabIndex == 1" v-if="tabState[1]"></VideoTab>
-            <MovieTab v-show="bottomTabIndex == 2" v-if="tabState[2]"></MovieTab>
-            <MyTab v-show="bottomTabIndex == 3" v-if="tabState[3]"></MyTab>
+            <ArticleTabComponent v-show="bottomTabIndex == 0"></ArticleTabComponent>
+            <VideoTabComponent v-show="bottomTabIndex == 1" v-if="tabState[1]"></VideoTabComponent>
+            <MovieTabComponent v-show="bottomTabIndex == 2" v-if="tabState[2]"></MovieTabComponent>
+            <MyTabComponent v-show="bottomTabIndex == 3" v-if="tabState[3]"></MyTabComponent>
         </div>
 
         <ul id="footer-tab-wrapper">
@@ -31,15 +31,15 @@
 
 <script lang="ts">
     import {defineComponent,ref,reactive} from 'vue';
-    import ArticleTab from "../components/ArticleTab.vue";
-    import VideoTab from "../components/VideoTab.vue";
-    import MovieTab from "../components/MovieTab.vue";
-    import MyTab from "../components/MyTab.vue";
+    import ArticleTabComponent from "../components/ArticleTabComponent.vue";
+    import VideoTabComponent from "../components/VideoTabComponent.vue";
+    import MovieTabComponent from "../components/MovieTabComponent.vue";
+    import MyTabComponent from "../components/MyTabComponent.vue";
     export default defineComponent({
         name: 'Home',
-        components:{ArticleTab,VideoTab,MovieTab,MyTab},
+        components:{ArticleTabComponent,VideoTabComponent,MovieTabComponent,MyTabComponent},
         async setup() {
-            let bottomTabIndex = ref(0);
+            let bottomTabIndex = ref<number>(0);
             const tabState = reactive<Array<boolean>>([true,false,false,false]);
 
             /**

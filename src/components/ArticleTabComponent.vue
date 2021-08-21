@@ -3,7 +3,7 @@
         <div class="nav-wrapper">
             <div class="nav-list-scroll" ref="articleNavScroll">
                 <ul class="nav-list">
-                    <li class="nav-item" @click="tabArticleChannel(item)" :class="{'nav-item-active':activeId == item.id}" v-for="item,index in channels" :key="'nav-item-article'+index">
+                    <li class="nav-item" @click="useTabArticleChannel(item)" :class="{'nav-item-active':activeId == item.id}" v-for="item,index in channels" :key="'nav-item-article'+index">
                         {{item.channelName}}
                     </li>
                 </ul>
@@ -14,7 +14,7 @@
         <div ref="articleScrollWrapper" class="scroll-wrapper">
             <div class="scroll-container">
                 <div class="loading-box" v-if="!isInit"></div>
-                <ArticleList :articleList="list"></ArticleList>
+                <ArticleListComponent :articleList="list"></ArticleListComponent>
                 <template v-if="list.length>0">
                     <div class="loading-tip" v-if="isEnd">已经到底了</div>
                     <div class="icon-loading" v-else></div>
@@ -27,15 +27,15 @@
 <script lang="ts">
     import {defineComponent} from 'vue';
     import useArticleEffect from "../hooks/useArticleEffect";
-    import ArticleList from "./ArticleList.vue";
+    import ArticleListComponent from "./ArticleListComponent.vue";
     export default defineComponent({
-        name: 'ArticleTab',
+        name: 'ArticleTabComponent',
         components:{
-            ArticleList
+            ArticleListComponent
         },
         setup(){
             const articleEffect = useArticleEffect();
-            articleEffect.useInitArticleEffect();
+            articleEffect.useInitArticle();
 
             return {
                 ...articleEffect

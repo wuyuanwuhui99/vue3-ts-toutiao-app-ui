@@ -9,14 +9,14 @@
     </Suspense>
 </template>
 
-<script>
+<script lang="ts">
     import {defineComponent,onMounted,ref} from 'vue';
     import {isMobile} from './utils'
     import {getUserDataService} from "./service/appService";
     import emitter from "./utils/emitter";
     export default defineComponent({
         setup () {
-            const isLogin = ref(false);
+            const isLogin = ref<boolean>(false);
 
             onMounted(() => {
                 if (!isMobile()) {

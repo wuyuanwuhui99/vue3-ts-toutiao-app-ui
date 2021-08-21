@@ -32,7 +32,7 @@ export default ()=> {
      * @description: 切换频道
      * @date: 2020-06-27 21:29
      */
-    const tabMovieChannel = async (classify:string) => {
+    const useTabMovieChannel = async (classify:string) => {
         movieState.params = {
             pageNum: 1,
             pageSize: 20,
@@ -53,7 +53,7 @@ export default ()=> {
      * @description: 初始化视频方法
      * @date: 2020-07-02 00:11
      */
-    const useInitMovieEffect = async ()=>{
+    const useInitMovie = async ()=>{
         movieState.params.classify = "电影";
         const result:Array<MovieInterface>  = await getMovieListService(movieState.params);
         movieState.list.push(...result);
@@ -87,9 +87,9 @@ export default ()=> {
     
     return {
         ...toRefs(movieState),
-        tabMovieChannel,
+        useTabMovieChannel,
         movieNavScroll,
         movieScrollWrapper,
-        useInitMovieEffect
+        useInitMovie
     }
 }

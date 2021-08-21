@@ -1,6 +1,6 @@
 <template>
     <ul class="articles">
-        <li class="article-item" @click="goArticleDetail(item.id)" :key="'article-item'+index+activeId" v-for="item,index in articleList">
+        <li class="article-item" @click="useGoArticleDetail(item.id)" :key="'article-item'+index+activeId" v-for="item,index in articleList">
             <div class="title-wrapper">
                 <p class="title">{{item.title}}</p>
                 <div class="single-img" v-height v-if="item.imgList.length === 1" v-html="item.imgList[0]"></div>
@@ -23,7 +23,7 @@
     import { useRouter } from "vue-router";
     import {ArticleInterface} from '@/types'
     export default defineComponent({
-        name: 'ArticleList',
+        name: 'ArticleListComponent',
         props:{
             articleList:{
                 type:Array as PropType<ArticleInterface[]>,
@@ -39,10 +39,10 @@
         },
         setup(){
             const router = useRouter();
-            const goArticleDetail = (id:number)=>{
+            const useGoArticleDetail = (id:number)=>{
                 router.push(`/articleDetail/${id}`);
             };
-            return {fomatTime,getImgHtml,goArticleDetail}
+            return {fomatTime,getImgHtml,useGoArticleDetail}
         }
     })
 </script>

@@ -32,7 +32,7 @@ export default ()=> {
      * @description: 切换频道
      * @date: 2020-06-27 21:29
      */
-    const tabArticleChannel = async (navItem: ArticleChannelInterface) => {
+    const useTabArticleChannel = async (navItem: ArticleChannelInterface) => {
         articleState.activeId = navItem.id;
         articleState.params = {
             pageNum: 1,
@@ -54,7 +54,7 @@ export default ()=> {
      * @description: 初始化方法
      * @date: 2020-06-30 23:28
      */
-    const useInitArticleEffect = async ()=>{
+    const useInitArticle = async ()=>{
         const res = await getFavoriteChannelsListService();//获取频道信息
         articleState.channels.push(...res);
         const activeChannel = articleState.channels.find((item: ArticleChannelInterface) => item.status == 1);
@@ -101,16 +101,16 @@ export default ()=> {
     
     const router = useRouter();
     
-    const goArticleDetail = (id:number)=>{
+    const useGoArticleDetail = (id:number)=>{
         router.push(`/articleDetail/${id}`);
     };
     
     return {
         ...toRefs(articleState),
-        tabArticleChannel,
+        useTabArticleChannel,
         articleNavScroll,
         articleScrollWrapper,
-        useInitArticleEffect,
-        goArticleDetail
+        useInitArticle,
+        useGoArticleDetail
     }
 }

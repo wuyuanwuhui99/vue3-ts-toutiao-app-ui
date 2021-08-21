@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,toRefs} from 'vue';
+    import {defineComponent} from 'vue';
     import useArticleDetailEffect from "../hooks/useArticleDetailEffect";
     import {fomatTime} from "../utils";
     export default defineComponent({
@@ -25,7 +25,7 @@
         setup() {
             const articleState = useArticleDetailEffect();
 
-            articleState.useInitArticleDetailEffect();
+            articleState.useInitArticleDetail();
 
             return {
                 ...articleState,

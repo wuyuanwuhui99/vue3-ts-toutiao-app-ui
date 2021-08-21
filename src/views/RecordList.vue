@@ -1,21 +1,21 @@
 <template>
     <div>
-        <ClassifyHeader :classifyTitle="titleMap[type]"></ClassifyHeader>
-        <ArticleList :articleList="articleRecordList" v-if="type == 'article'"></ArticleList>
-        <ArticleList :articleList="articleRecordList" v-else-if="type == 'movie'"></ArticleList>
-        <ArticleList :articleList="articleRecordList" v-else-if="type == 'video'"></ArticleList>
+        <ClassifyHeaderComponent :classifyTitle="titleMap[type]"></ClassifyHeaderComponent>
+        <ArticleListComponent :articleList="articleRecordList" v-if="type == 'article'"></ArticleListComponent>
+        <ArticleListComponent :articleList="articleRecordList" v-else-if="type == 'movie'"></ArticleListComponent>
+        <ArticleListComponent :articleList="articleRecordList" v-else-if="type == 'video'"></ArticleListComponent>
     </div>
 </template>
 
 <script lang="ts">
     import {defineComponent} from "vue";
-    import ArticleList from "../components/ArticleList.vue";
-    import ClassifyHeader from "../components/ClassifyHeader.vue";
+    import ArticleListComponent from "../components/ArticleListComponent.vue";
+    import ClassifyHeaderComponent from "../components/ClassifyHeaderComponent.vue";
     import {getRecordListService} from "../service/recordService"
     import {useRoute } from "vue-router"
     export default defineComponent({
         name: 'ArticleRecord',
-        components:{ArticleList,ClassifyHeader},
+        components:{ArticleListComponent,ClassifyHeaderComponent},
         async setup () {
             const route:any = useRoute();
             const type:string = route.query.type;

@@ -3,7 +3,7 @@
         <div class="nav-wrapper">
             <div class="nav-list-scroll" ref="movieNavScroll">
                 <ul class="nav-list">
-                    <li class="nav-item" @click="tabMovieChannel(item)"  :class="{'nav-item-active':activeClassify == item}" v-for="item,index in classifies" :key="'nav-item-movie'+index">
+                    <li class="nav-item" @click="useTabMovieChannel(item)"  :class="{'nav-item-active':activeClassify == item}" v-for="item,index in classifies" :key="'nav-item-movie'+index">
                         {{item}}
                     </li>
                 </ul>
@@ -37,10 +37,10 @@
     import useMovieEffect from "../hooks/useMovieEffect";
     import {fomatTime} from "../utils";
     export default defineComponent({
-        name: 'MovieTab',
+        name: 'MovieTabComponent',
         setup(){
             const movieEffect = useMovieEffect();
-            movieEffect.useInitMovieEffect();
+            movieEffect.useInitMovie();
             return {
                 fomatTime,
                 ...movieEffect

@@ -14,7 +14,7 @@ export default ()=> {
     const isFocus = ref<boolean>(false);
     const route:any = useRoute();
     
-    const useInitArticleDetailEffect = async () => {
+    const useInitArticleDetail = async () => {
         const result = await getArticleService(route.params.id);
         Object.assign(articleDetail,result);
         isFocusService(articleDetail.authorId,"article").then((res)=>{
@@ -35,7 +35,7 @@ export default ()=> {
     };
     
     return {
-        useInitArticleDetailEffect,
+        useInitArticleDetail,
         articleDetail,
         isFocus,
         useHandleFocus
