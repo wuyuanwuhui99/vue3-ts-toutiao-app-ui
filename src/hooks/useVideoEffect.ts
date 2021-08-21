@@ -3,12 +3,13 @@ import {
     VideoInterface,
     VideoChannelInterface,
     VideoStateInterface,
-} from "@/types";
+} from "../types";
 import {
     getVideoListService,
     getVideoFavoriteChannelsService
 } from "../service/videoService";
 import BScroll from "better-scroll";
+import emitter from "../utils/emitter";
 
 export default ()=> {
     
@@ -82,6 +83,9 @@ export default ()=> {
             videoState.bscroll = new BScroll(videoScrollWrapper.value  as HTMLElement, {
                 probeType: 1,
                 click: true,
+            });
+            videoState.bscroll.on("scroll",()=>{
+                emitter.emit("scroll");
             });
             videoState.bscroll.on('scrollEnd', async () => {
                 if (videoState.bscroll.y <= (videoState.bscroll.maxScrollY + 100) && !videoState.isEnd && !videoState.loading) {

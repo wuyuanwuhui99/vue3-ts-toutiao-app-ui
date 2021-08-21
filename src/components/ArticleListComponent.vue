@@ -11,17 +11,21 @@
             <div class="footer-wrapper">
                 <span class="footer-item footer-item-top" v-if="item.isTop == '1'">置顶</span>
                 <a class="footer-item">{{item.authorInfo && item.authorInfo.name ? item.authorInfo.name : item.authorId}}</a>
-                <time class="footer-item">{{item.createTime?fomatTime(item.createTime):""}}</time>
+                <time class="footer-item footer-item-time">{{item.createTime?fomatTime(item.createTime):""}}</time>
+                <span class="iconfont iconfont-more" @click.stop="useShowHandle(index)"></span>
+                <MoreHandleComponent v-if="showHandleIndex == index" :item="item" :type="'article'"></MoreHandleComponent>
             </div>
         </li>
     </ul>
 </template>
 
 <script lang="ts">
-    import {defineComponent,PropType} from "vue";
+    import {defineComponent,PropType,ref,onUnmounted} from "vue";
     import {fomatTime,getImgHtml} from "../utils";
     import { useRouter } from "vue-router";
-    import {ArticleInterface} from '@/types'
+    import {ArticleInterface} from '../types'
+    import MoreHandleComponent from "./MoreHandleComponent.vue";
+    import emitter from "../utils/emitter"
     export default defineComponent({
         name: 'ArticleListComponent',
         props:{
@@ -30,6 +34,7 @@
                 required:true
             }
         },
+        components:{MoreHandleComponent},
         directives: {
             height: {
                 mounted(el) {
@@ -38,11 +43,35 @@
             },
         },
         setup(){
+            const showHandleIndex = ref<number>(-1);
             const router = useRouter();
             const useGoArticleDetail = (id:number)=>{
                 router.push(`/articleDetail/${id}`);
             };
-            return {fomatTime,getImgHtml,useGoArticleDetail}
+            /**
+             * @author: wuwenqiang
+             * @description: 显示点赞评论收藏的操作框
+             * @date: 2021-08-15 16:20
+             */
+            const useShowHandle = (index:number)=>{
+                showHandleIndex.value = index;
+            };
+            /**
+             * @author: wuwenqiang
+             * @description: 点击了其他地方，因此点赞评论操作框
+             * @date: 2021-08-15 16:20
+             */
+            const useHandleVideo = ()=>{
+                showHandleIndex.value = -1;
+            };
+
+            emitter.$on("bodyClick",useHandleVideo);
+
+            onUnmounted(()=>{
+                emitter.$off("bodyClick",useHandleVideo)
+            });
+
+            return {fomatTime,useGoArticleDetail,showHandleIndex,useShowHandle,getImgHtml}
         }
     })
 </script>
@@ -89,6 +118,9 @@
                     }
                     &.footer-item-top{
                         color: @color-active;
+                    }
+                    &.footer-item-time{
+                        flex: 1;
                     }
                 }
             }

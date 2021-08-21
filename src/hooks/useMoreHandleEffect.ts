@@ -1,4 +1,4 @@
-import {MixinInterface} from "@/types";
+import {MixinInterface} from "../types";
 import {ref} from "vue";
 import {
     isFavoriteService,
@@ -12,6 +12,7 @@ export default (item:MixinInterface,type:string)=> {
     const isFavorite = ref<boolean>(false);
     const isLike = ref<boolean>(false);
     const showComment = ref<boolean>(false);
+    let loading:boolean = false;
     /**
      * @author: wuwenqiang
      * @description: 显示点赞评论收藏的操作框
@@ -28,10 +29,12 @@ export default (item:MixinInterface,type:string)=> {
      * @date: 2021-08-15 16:20
      */
     const useHandleLike =()=>{
+        if(loading)return;
+        loading = true;
         if(isLike.value){
-            deleteLikeService(type,item.id).then(res=> isLike.value = !(res > 0));
+            deleteLikeService(type,item.id).then(res=> isLike.value = !(res > 0)).finally(()=>loading = false);
         }else{
-            insertLikeService(type,item.id).then(res=> isLike.value = res > 0);
+            insertLikeService(type,item.id).then(res=> isLike.value = res > 0).finally(()=>loading = false);
         }
     };
     
@@ -41,10 +44,12 @@ export default (item:MixinInterface,type:string)=> {
      * @date: 2021-08-18 19:57
      */
     const useHandleFavorite = ()=>{
+        if(loading)return;
+        loading = true;
         if(isFavorite.value){
-            deleteFavoriteService(type,item.id).then(res=> isFavorite.value = !(res > 0));
+            deleteFavoriteService(type,item.id).then(res=> isFavorite.value = !(res > 0)).finally(()=>loading = false);
         }else{
-            insertFavoriteService(type,item.id).then(res=> isFavorite.value = res > 0);
+            insertFavoriteService(type,item.id).then(res=> isFavorite.value = res > 0).finally(()=>loading = false);
         }
     };
     

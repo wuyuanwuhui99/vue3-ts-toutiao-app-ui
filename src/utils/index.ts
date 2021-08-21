@@ -1,4 +1,4 @@
-import {ArticleInterface} from "@/types";
+import {ArticleInterface} from "../types";
 
 export const zorefull=(value:number):string|number=>{
     return value < 9 ? "0"+value:value
@@ -59,3 +59,10 @@ export const getImgHtml = (htmlStr:string,length:number,index:number) =>{
         return htmlStr;
     }
 };
+
+/**
+ * @author: wuwenqiang
+ * @description: 获取图片数量
+ * @date: 2020-06-27 21:29
+ */
+export const getUrl = (url:string,type:string) => url.replace("{type}",type);

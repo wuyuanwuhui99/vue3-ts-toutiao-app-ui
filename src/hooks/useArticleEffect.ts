@@ -1,7 +1,7 @@
 import {ref,reactive,nextTick,toRefs} from "vue"
 import {
     ArticleStateInterface,
-    ArticleChannelInterface, ArticleInterface,
+    ArticleChannelInterface
 } from "../types";
 import {
     getFavoriteChannelsListService,
@@ -9,6 +9,7 @@ import {
 } from "../service/homeService";
 import BScroll from "better-scroll";
 import { useRouter } from "vue-router";
+import emitter from "../utils/emitter";
 export default ()=> {
     const articleState = reactive<ArticleStateInterface>({
         isInit: true,
@@ -77,6 +78,9 @@ export default ()=> {
             articleState.bscroll = new BScroll(articleScrollWrapper.value as HTMLElement, {
                 probeType: 1,
                 click: true,
+            });
+            articleState.bscroll.on("scroll",()=>{
+                emitter.emit("scroll");
             });
             articleState.bscroll.on('scrollEnd', async () => {
                 if (articleState.bscroll.y <= (articleState.bscroll.maxScrollY + 100) && !articleState.isEnd && !articleState.loading) {

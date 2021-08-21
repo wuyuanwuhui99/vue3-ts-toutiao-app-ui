@@ -10,7 +10,7 @@
                 <img class="avater" v-if="item.authorInfo.avatarUrl" :src="item.authorInfo.avatarUrl"/>
                 <div class="sub-title" v-if="item.authorInfo.authorDesc">{{item.authorInfo.authorDesc}}</div>
                 <span class="video-time">{{fomatTime(item.publishTime)}}</span>
-                <span class="iconfont iconfont-more" @click.stop="useShowHandle(item,index)"></span>
+                <span class="iconfont iconfont-more" @click.stop="useShowHandle(index)"></span>
                 <MoreHandleComponent v-if="showHandleIndex == index" :item="item" :type="'video'"></MoreHandleComponent>
             </div>
         </li>
@@ -19,9 +19,9 @@
 
 <script lang="ts">
     import {defineComponent,PropType,ref,onUnmounted,reactive} from "vue";
-    import {VideoInterface} from '@/types';
-    import emitter from "@/utils/emitter";
-    import {fomatTime} from "@/utils";
+    import {VideoInterface} from '../types';
+    import emitter from "../utils/emitter";
+    import {fomatTime} from "../utils";
     import MoreHandleComponent from "./MoreHandleComponent.vue";
     export default defineComponent({
         name: 'VideoListComponent',
@@ -35,12 +35,13 @@
         setup(props){
             const videoList = reactive<Array<VideoInterface>>(props.list);
             const showHandleIndex = ref<number>(-1);
+
             /**
              * @author: wuwenqiang
              * @description: 显示点赞评论收藏的操作框
              * @date: 2021-08-15 16:20
              */
-            const useShowHandle = (item:VideoInterface,index:number)=>{
+            const useShowHandle = (index:number)=>{
                 showHandleIndex.value = index;
             };
 

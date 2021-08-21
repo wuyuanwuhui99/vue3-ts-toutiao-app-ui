@@ -6,7 +6,7 @@ import {
     insertFocusService,
     deleteFocusService,
 } from "../service/articleDetailService"
-import {ArticleInterface} from "@/types";
+import {ArticleInterface} from "../types";
 
 export default ()=> {
     
@@ -17,18 +17,18 @@ export default ()=> {
     const useInitArticleDetail = async () => {
         const result = await getArticleService(route.params.id);
         Object.assign(articleDetail,result);
-        isFocusService(articleDetail.authorId,"article").then((res)=>{
+        isFocusService(articleDetail.authorId,"toutiao").then((res)=>{
             isFocus.value = res > 0;
         })
     };
     
     const useHandleFocus =()=>{
         if(isFocus.value){
-            deleteFocusService(articleDetail.authorId,"article").then((res)=>{
+            deleteFocusService(articleDetail.authorId,"toutiao").then((res)=>{
                 isFocus.value = !(res > 0)
             });
         }else{
-            insertFocusService(articleDetail.authorId,"article").then((res)=>{
+            insertFocusService(articleDetail.authorId,"toutiao").then((res)=>{
                 isFocus.value = res > 0;
             });
         }

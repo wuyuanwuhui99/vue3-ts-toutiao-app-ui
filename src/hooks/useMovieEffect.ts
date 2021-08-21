@@ -2,9 +2,9 @@ import {ref,reactive,nextTick,Ref,toRefs} from "vue"
 import {
     MovieInterface,
     MovieStateInterface,
-} from "@/types";
+} from "../types";
 import BScroll from "better-scroll";
-import {getMovieListService} from "@/service/movieService";
+import {getMovieListService} from "../service/movieService";
 
 export default ()=> {
     
