@@ -62,7 +62,23 @@ export const getImgHtml = (htmlStr:string,length:number,index:number) =>{
 
 /**
  * @author: wuwenqiang
- * @description: 获取图片数量
+ * @description: 根据类型获取api地址
  * @date: 2020-06-27 21:29
  */
 export const getUrl = (url:string,type:string) => url.replace("{type}",type);
+
+/**
+ * @author: wuwenqiang
+ * @description: 根据类型转换参数
+ * @date: 2020-06-27 21:29
+ */
+export const getParams = (type:string,id:number,params?:object) => {
+    switch (type) {
+        case "toutiao":
+            return {articleId:id,...params};
+        case "video":
+            return {videoId:id,...params};
+        case "movieId":
+            return {movieId:id,...params};
+    }
+};

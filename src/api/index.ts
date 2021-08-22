@@ -18,4 +18,10 @@ export default {
     isFocus:"/service/{type}-getway/isFocus",//查询是否已经关注
     insertFocus:"/service/{type}-getway/insertFocus",//新增关注
     deleteFocus:"/service/{type}-getway/deleteFocus",//取消关注
+    getCommentCount:"/service/{type}/getCommentCount",//获取评论总条数
+    getTopCommentList:"/service/{type}/getTopCommentList",//获取一级评论列表
+    insertComment:"/service/{type}-getway/insertComment",//新增评论
+    deleteComment:"/service/{type}-getway/deleteComment/{id}",//删除评论
+    getReplyCommentList:"/service/{type}/getReplyCommentList",//获取回复列表
+    getCommentItem:"/service/{type}/getCommentItem",//获取新增的单条评论或者回复
 }

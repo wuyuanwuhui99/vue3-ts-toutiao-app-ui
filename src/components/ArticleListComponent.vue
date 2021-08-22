@@ -13,7 +13,7 @@
                 <a class="footer-item">{{item.authorInfo && item.authorInfo.name ? item.authorInfo.name : item.authorId}}</a>
                 <time class="footer-item footer-item-time">{{item.createTime?fomatTime(item.createTime):""}}</time>
                 <span class="iconfont iconfont-more" @click.stop="useShowHandle(index)"></span>
-                <MoreHandleComponent v-if="showHandleIndex == index" :item="item" :type="'article'"></MoreHandleComponent>
+                <MoreHandleComponent v-if="showHandleIndex == index" :item="item" :type="'toutiao'"></MoreHandleComponent>
             </div>
         </li>
     </ul>

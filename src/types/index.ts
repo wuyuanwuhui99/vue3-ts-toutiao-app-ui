@@ -160,7 +160,7 @@ export interface MovieStateInterface {
 }
 export interface MovieInterface {
     id:number,//主键',
-    movieId:string,//电影id
+    movieId:number,//电影id
     movieName:string,//电影名称
     director:string,//导演
     star:string,//主演
@@ -199,6 +199,7 @@ export interface MovieParamsInterface {
     director?:string,//导员
     keyword?:string
 }
+
 export interface HandlePropsInterface {
     type:string,
     item:MixinInterface
@@ -206,6 +207,35 @@ export interface HandlePropsInterface {
 
 export type MixinInterface = ArticleInterface|MovieInterface|VideoInterface
 
+export interface ReplyCommentInterface {
+    id?:number,
+    content:string,
+    parentId?:number,
+    topId?:number,
+    articleId?:number,
+    videoId?:number,
+    movieId?:number,
+    userId:string,
+    username?:string,
+    avater?:string,
+    replyUserId?:string,
+    replyUserName?:string,
+    createTime?:string,
+    updateTime?:string,
+}
+
+export interface TopCommentInterface extends ReplyCommentInterface{
+    replyCount:number,
+    pageNum?:number,//第某页回复
+    pageSize?:number,//每页回复数量
+    isLoadAllReply?:boolean,//是否已经加载了所有回复
+    replyList:Array<ReplyCommentInterface>
+}
+
+export interface CommentListPropsInterface {
+    type:string,
+    id:number
+}
 
 
 

@@ -1,14 +1,13 @@
 <template>
-    <div class="handle-wrapper" @click.stop="">
-        <span class="iconfont iconfont-handle iconfont-like" :class="isLike?'iconfont-like-active':'iconfont-like'" @click="useHandleLike"></span>
-        <span class="iconfont iconfont-handle" @click.stop="useHandleFavorite" :class="isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
-        <span class="iconfont iconfont-handle iconfont-comment" @click="useShowComment(true)"></span>
-        <div class="comment-container" v-if="showComment">
+    <div  @click.stop="" class="more-wrapper">
+        <div class="handle-wrapper" v-if="!showComment">
+            <span class="iconfont iconfont-handle iconfont-like" :class="isLike?'iconfont-like-active':'iconfont-like'" @click="useHandleLike"></span>
+            <span class="iconfont iconfont-handle" @click="useHandleFavorite" :class="isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
+            <span class="iconfont iconfont-handle iconfont-comment" @click="useShowComment(true)"></span>
+        </div>
+        <div class="comment-container" v-else>
             <div class="mask" @click="useShowComment(false)"></div>
-            <div class="comment-wrapper">
-                <div class="comment-header">123条评论</div>
-                <CommentListComponent style="flex: 1"></CommentListComponent>
-            </div>
+            <CommentListComponent style="flex: 1" :type="type" :id="item.id"></CommentListComponent>
         </div>
     </div>
 </template>
@@ -42,19 +41,21 @@
 
 <style lang="less" scoped>
     @import "../common/style/variable.less";
-    .handle-wrapper{
+    .more-wrapper{
         position: absolute;
         z-index: 1;
-        background: #666;
-        padding: @small-margin;
         right: 2rem;
-        border-radius: @border-raduis;
-        .iconfont-handle{
-            margin-left: @big-margin;
-            color:#fff;
-            font-size: @article-title-font-size;
-            &:first-child{
-                margin-left:0;
+        .handle-wrapper{
+            background: #666;
+            padding: @small-margin;
+            border-radius: @border-raduis;
+            .iconfont-handle{
+                margin-left: @big-margin;
+                color:#fff;
+                font-size: @article-title-font-size;
+                &:first-child{
+                    margin-left:0;
+                }
             }
         }
         .comment-container{
@@ -69,21 +70,9 @@
             .mask{
                 width: 100%;
                 height: 39%;
-            }
-            .comment-wrapper{
-                flex: 1;
-                background: #fff;
-                display: flex;
-                flex-direction: column;
-                overflow: auto;
-                &::-webkit-scrollbar{
-                    display: none;
-                }
-                .comment-header{
-                    text-align: center;
-                    padding-top: @small-margin;
-                }
+                background: rgba(0,0,0,0.2);
             }
         }
     }
+
 </style>

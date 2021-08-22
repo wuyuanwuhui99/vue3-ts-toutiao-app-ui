@@ -5,8 +5,8 @@
                 <div id="my-avater-wrapper">
                     <img :src="userData.avater" id="my-avater-img"/>
                     <div id="user-info">
-                        <div id="user-name">吴时吴刻</div>
-                        <div id="user-sign">无怨，有悔</div>
+                        <div id="user-name">{{userData.username}}</div>
+                        <div id="user-sign">{{userData.sign}}</div>
                     </div>
                     <i class="iconfont iconfont-set"></i>
                 </div>
