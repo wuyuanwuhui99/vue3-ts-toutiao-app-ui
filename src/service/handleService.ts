@@ -1,7 +1,7 @@
 import axios, {AxiosResponse} from "axios";
 import api from "../api";
 import {getUrl,getParams} from "../utils"
-import {MixinInterface,TopCommentInterface,ReplyCommentInterface} from "@/types";
+import {TopCommentInterface,ReplyCommentInterface} from "@/types";
 
 export const isFavoriteService = (type:string,id:number) => {
     return axios.get(getUrl(api.isFavorite,type), {params:getParams(type,id)}).then((res:AxiosResponse<number>)=>res.data);

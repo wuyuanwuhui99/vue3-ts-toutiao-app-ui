@@ -1,5 +1,6 @@
 import {ReplyCommentInterface, TopCommentInterface} from "../types";
-import {ref,reactive} from "vue";
+import {ref,reactive,onUnmounted} from "vue";
+import emitter from "../utils/emitter";
 import {
     getCommentCountService,
     getTopCommentListService,
@@ -40,7 +41,13 @@ export default (type:string,id:number)=> {
         commentItem.parentId = replyCommentItem.id;
         commentItem.topId = replyCommentItem.topId || replyCommentItem.id;
         commentItem.content = content.value;
-        commentItem.articleId = id;
+        if(type == "toutiao"){
+            commentItem.articleId = id;
+        }else if(type == "video"){
+            commentItem.videoId = id;
+        }else if(type == "movie"){
+            commentItem.movieId = id;
+        }
         commentItem.replyUserId = replyCommentItem.userId;
         let commmentId:number = -1;//新增之后返回的评论的id
         await insertCommentService(type, commentItem).then((res) => {
@@ -80,6 +87,12 @@ export default (type:string,id:number)=> {
             commentItem.replyList.push(...res);
         });
     };
+    
+    emitter.emit("disable-scroll");//禁止滚动页面
+    
+    onUnmounted(()=>{
+        emitter.emit("enable-scroll");//解除禁止滚动页面
+    });
     
     return {
         commentCount,isDone,topCommentList,placeholder,sendComment,content,useReply,useGetReplyCommentList

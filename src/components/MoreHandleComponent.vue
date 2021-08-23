@@ -3,10 +3,10 @@
         <div class="handle-wrapper" v-if="!showComment">
             <span class="iconfont iconfont-handle iconfont-like" :class="isLike?'iconfont-like-active':'iconfont-like'" @click="useHandleLike"></span>
             <span class="iconfont iconfont-handle" @click="useHandleFavorite" :class="isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
-            <span class="iconfont iconfont-handle iconfont-comment" @click="useShowComment(true)"></span>
+            <span class="iconfont iconfont-handle iconfont-comment" @click="useShowComment"></span>
         </div>
         <div class="comment-container" v-else>
-            <div class="mask" @click="useShowComment(false)"></div>
+            <div class="mask" @click="useHideComment"></div>
             <CommentListComponent style="flex: 1" :type="type" :id="item.id"></CommentListComponent>
         </div>
     </div>
@@ -43,7 +43,7 @@
     @import "../common/style/variable.less";
     .more-wrapper{
         position: absolute;
-        z-index: 1;
+        z-index: 2;
         right: 2rem;
         .handle-wrapper{
             background: #666;

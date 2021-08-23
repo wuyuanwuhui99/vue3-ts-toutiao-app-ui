@@ -1,5 +1,5 @@
 <template>
-    <div class="comment-wrapper">
+    <div class="comment-wrapper" ref="commentWrapper">
         <div class="comment-header">{{commentCount}}条评论</div>
         <div class="comment-list-wrapper">
             <ul class="comment-list">
@@ -173,7 +173,8 @@
                 color: #fff;
                 padding: @small-margin;
                 border: none;
-                border-radius: 0.5rem;
+                border-radius: 1rem;
+                padding: @small-margin @big-margin;
                 margin-left: @small-margin;
             }
         }

@@ -1,5 +1,5 @@
 import {MixinInterface} from "../types";
-import {ref} from "vue";
+import {ref,onUnmounted} from "vue";
 import {
     isFavoriteService,
     isLikeService,
@@ -8,6 +8,7 @@ import {
     deleteFavoriteService,
     insertFavoriteService
 } from "../service/handleService";
+import emitter from "../utils/emitter";
 export default (item:MixinInterface,type:string)=> {
     const isFavorite = ref<boolean>(false);
     const isLike = ref<boolean>(false);
@@ -58,14 +59,23 @@ export default (item:MixinInterface,type:string)=> {
      * @description: 显示评论
      * @date: 2021-08-21 14:16
      */
-    const useShowComment = (isShow:boolean)=>{
-        showComment.value = isShow;
+    const useShowComment = ()=>{
+        showComment.value = true;
     };
     
     useShowHandle();
     
+    const useHideComment = ()=>{
+        showComment.value = false;
+    };
+    
+    emitter.on("scroll",useHideComment);
+    
+    onUnmounted(()=>{
+        emitter.off("scroll",useHideComment);
+    });
     
     return {
-        useHandleFavorite,useHandleLike,isFavorite,isLike,useShowComment,showComment
+        useHandleFavorite,useHandleLike,isFavorite,isLike,useShowComment,showComment,useHideComment
     }
 }

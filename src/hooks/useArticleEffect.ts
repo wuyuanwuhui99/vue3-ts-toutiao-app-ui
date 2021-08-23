@@ -1,4 +1,4 @@
-import {ref,reactive,nextTick,toRefs} from "vue"
+import {ref,reactive,nextTick,toRefs,onUnmounted} from "vue"
 import {
     ArticleStateInterface,
     ArticleChannelInterface
@@ -10,6 +10,7 @@ import {
 import BScroll from "better-scroll";
 import { useRouter } from "vue-router";
 import emitter from "../utils/emitter";
+
 export default ()=> {
     const articleState = reactive<ArticleStateInterface>({
         isInit: true,
@@ -108,6 +109,32 @@ export default ()=> {
     const useGoArticleDetail = (id:number)=>{
         router.push(`/articleDetail/${id}`);
     };
+    
+    /**
+     * @author: wuwenqiang
+     * @description: 弹出评论对话框禁止滚动页面
+     * @date: 2020-08-23 23:11
+     */
+    const disableScroll =()=>{
+        articleState.bscroll.disable()
+    };
+    
+    /**
+     * @author: wuwenqiang
+     * @description: 弹出评论对话框禁止滚动页面
+     * @date: 2020-08-23 23:11
+     */
+    const enableScroll = ()=>{
+        articleState.bscroll.enable()
+    };
+    
+    emitter.on("disable-scroll",disableScroll);
+    emitter.on("enable-scroll",enableScroll);
+    
+    onUnmounted(()=>{
+        emitter.off("disable-scroll",disableScroll);
+        emitter.off("enable-scroll",disableScroll);
+    });
     
     return {
         ...toRefs(articleState),
