@@ -1,6 +1,5 @@
 import {ReplyCommentInterface, TopCommentInterface} from "../types";
-import {ref,reactive,onUnmounted} from "vue";
-import emitter from "../utils/emitter";
+import {ref,reactive} from "vue";
 import {
     getCommentCountService,
     getTopCommentListService,
@@ -87,12 +86,6 @@ export default (type:string,id:number)=> {
             commentItem.replyList.push(...res);
         });
     };
-    
-    emitter.emit("disable-scroll");//禁止滚动页面
-    
-    onUnmounted(()=>{
-        emitter.emit("enable-scroll");//解除禁止滚动页面
-    });
     
     return {
         commentCount,isDone,topCommentList,placeholder,sendComment,content,useReply,useGetReplyCommentList

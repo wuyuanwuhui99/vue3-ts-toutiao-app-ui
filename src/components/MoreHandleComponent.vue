@@ -5,7 +5,7 @@
             <span class="iconfont iconfont-handle" @click="useHandleFavorite" :class="isFavorite?'iconfont-has-collection':'iconfont-no-collection'"></span>
             <span class="iconfont iconfont-handle iconfont-comment" @click="useShowComment"></span>
         </div>
-        <div class="comment-container" v-else>
+        <div class="comment-container" v-else ref="commentContainer">
             <div class="mask" @click="useHideComment"></div>
             <CommentListComponent style="flex: 1" :type="type" :id="item.id"></CommentListComponent>
         </div>
@@ -41,6 +41,21 @@
 
 <style lang="less" scoped>
     @import "../common/style/variable.less";
+    .comment-container{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top:0;
+        left: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        .mask{
+            width: 100%;
+            height: 39%;
+            background: rgba(0,0,0,0.2);
+        }
+    }
     .more-wrapper{
         position: absolute;
         z-index: 2;
@@ -58,21 +73,7 @@
                 }
             }
         }
-        .comment-container{
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top:0;
-            left: 0;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            .mask{
-                width: 100%;
-                height: 39%;
-                background: rgba(0,0,0,0.2);
-            }
-        }
+
     }
 
 </style>

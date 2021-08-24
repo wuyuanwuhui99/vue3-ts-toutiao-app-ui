@@ -5,19 +5,19 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'Home',
         meta: {keepAlive: true},
-        component: () => import('../views/Home.vue')
+        component: () => import('../pages/HomePage.vue')
     },
     {
         path: '/articleDetail/:id',
         name: 'detail',
         meta: {keepAlive: false},
-        component: () => import('../views/ArticleDetail.vue')
+        component: () => import('../pages/ArticleDetailPage.vue')
     },
     {
         path: '/recordList',
         name: 'recordList',
         meta: {keepAlive: false},
-        component: () => import('../views/RecordList.vue')
+        component: () => import('../pages/RecordListPage.vue')
     }
 ];
 

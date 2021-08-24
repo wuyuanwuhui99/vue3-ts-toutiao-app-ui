@@ -6,23 +6,17 @@
             </keep-alive>
             <component :is="Component" v-if="!$route.meta.keepAlive" />
         </router-view>
+
     </Suspense>
 </template>
 
 <script lang="ts">
-    import {defineComponent,onMounted,ref} from 'vue';
-    import {isMobile} from './utils'
+    import {defineComponent,ref} from 'vue';
     import {getUserDataService} from "./service/appService";
     import emitter from "./utils/emitter";
     export default defineComponent({
         setup () {
             const isLogin = ref<boolean>(false);
-
-            onMounted(() => {
-                if (!isMobile()) {
-                    document.querySelector('#app').style = 'width:400px;max-height:800px;height:100%;border:1px solid #eee;margin: 0 auto'
-                }
-            });
 
             getUserDataService().then(() => {
                 isLogin.value = true;

@@ -26,7 +26,7 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import useArticleEffect from "../hooks/useArticleEffect";
+    import useArticleTabEffect from "../hooks/useArticleTabEffect";
     import ArticleListComponent from "./ArticleListComponent.vue";
     export default defineComponent({
         name: 'ArticleTabComponent',
@@ -34,9 +34,8 @@
             ArticleListComponent
         },
         setup(){
-            const articleEffect = useArticleEffect();
+            const articleEffect = useArticleTabEffect();
             articleEffect.useInitArticle();
-
             return {
                 ...articleEffect
             }

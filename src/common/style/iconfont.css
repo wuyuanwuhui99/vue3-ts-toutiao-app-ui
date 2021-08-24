@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-edit:before {
+  content: "\e63c";
+}
+
 .iconfont-arrow:before{
   content: "\e615";
 }

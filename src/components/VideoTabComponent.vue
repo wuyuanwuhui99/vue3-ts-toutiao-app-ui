@@ -13,7 +13,7 @@
         <div ref="videoScrollWrapper" class="scroll-wrapper">
             <div class="scroll-container">
                 <div class="loading-box" v-if="!isInit"></div>
-                <VideoListComponent :list="list"></VideoListComponent>
+                <VideoListComponent :videoList="list"></VideoListComponent>
                 <template v-if="list.length>0">
                     <div class="loading-tip" v-if="isEnd">已经到底了</div>
                     <div class="icon-loading" v-else></div>
@@ -25,14 +25,14 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import useVideoEffect from "../hooks/useVideoEffect";
+    import useVideoTabEffect from "../hooks/useVideoTabEffect";
     import {fomatTime} from "../utils";
     import VideoListComponent from "./VideoListComponent.vue";
     export default defineComponent({
         name: 'VideoTabComponent',
         components:{VideoListComponent},
         setup(){
-            const videoEffect = useVideoEffect();
+            const videoEffect = useVideoTabEffect();
             videoEffect.useInitVideo();
             return {
                 fomatTime,

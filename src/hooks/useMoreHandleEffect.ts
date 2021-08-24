@@ -1,5 +1,5 @@
 import {MixinInterface} from "../types";
-import {ref,onUnmounted} from "vue";
+import {ref,onUnmounted,watch,nextTick} from "vue";
 import {
     isFavoriteService,
     isLikeService,
@@ -13,6 +13,7 @@ export default (item:MixinInterface,type:string)=> {
     const isFavorite = ref<boolean>(false);
     const isLike = ref<boolean>(false);
     const showComment = ref<boolean>(false);
+    const commentContainer = ref<HTMLElement|null>(null);
     let loading:boolean = false;
     /**
      * @author: wuwenqiang
@@ -63,19 +64,33 @@ export default (item:MixinInterface,type:string)=> {
         showComment.value = true;
     };
     
-    useShowHandle();
-    
+    /**
+     * @author: wuwenqiang
+     * @description: 显示评论
+     * @date: 2021-08-21 14:16
+     */
     const useHideComment = ()=>{
         showComment.value = false;
     };
+
+    useShowHandle();
     
     emitter.on("scroll",useHideComment);
-    
+
     onUnmounted(()=>{
         emitter.off("scroll",useHideComment);
     });
     
+    watch(showComment,(value)=>{
+        if(value){
+            nextTick(()=>{
+                document.body.appendChild(commentContainer.value)
+            });
+        }
+        
+    });
+
     return {
-        useHandleFavorite,useHandleLike,isFavorite,isLike,useShowComment,showComment,useHideComment
+        useHandleFavorite,useHandleLike,isFavorite,isLike,useShowComment,showComment,useHideComment,commentContainer
     }
 }

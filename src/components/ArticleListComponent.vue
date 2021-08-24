@@ -1,6 +1,6 @@
 <template>
     <ul class="articles">
-        <li class="article-item" @click="useGoArticleDetail(item.id)" :key="'article-item'+index+activeId" v-for="item,index in articleList">
+        <li class="article-item" @click="useGoArticleDetail(item.id)" :key="'article-item'+index" v-for="item,index in articleList">
             <div class="title-wrapper">
                 <p class="title">{{item.title}}</p>
                 <div class="single-img" v-height v-if="item.imgList.length === 1" v-html="item.imgList[0]"></div>
@@ -20,12 +20,10 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent,PropType,ref,onUnmounted} from "vue";
-    import {fomatTime,getImgHtml} from "../utils";
-    import { useRouter } from "vue-router";
+    import {defineComponent,PropType} from "vue";
     import {ArticleInterface} from '../types'
     import MoreHandleComponent from "./MoreHandleComponent.vue";
-    import emitter from "../utils/emitter"
+    import useArticleListEffect from "../hooks/useArticleListEffect";
     export default defineComponent({
         name: 'ArticleListComponent',
         props:{
@@ -43,35 +41,10 @@
             },
         },
         setup(){
-            const showHandleIndex = ref<number>(-1);
-            const router = useRouter();
-            const useGoArticleDetail = (id:number)=>{
-                router.push(`/articleDetail/${id}`);
-            };
-            /**
-             * @author: wuwenqiang
-             * @description: 显示点赞评论收藏的操作框
-             * @date: 2021-08-15 16:20
-             */
-            const useShowHandle = (index:number)=>{
-                showHandleIndex.value = index;
-            };
-            /**
-             * @author: wuwenqiang
-             * @description: 点击了其他地方，因此点赞评论操作框
-             * @date: 2021-08-15 16:20
-             */
-            const useHandleVideo = ()=>{
-                showHandleIndex.value = -1;
-            };
+            return {
+                ...useArticleListEffect()
+            }
 
-            emitter.$on("bodyClick",useHandleVideo);
-
-            onUnmounted(()=>{
-                emitter.$off("bodyClick",useHandleVideo)
-            });
-
-            return {fomatTime,useGoArticleDetail,showHandleIndex,useShowHandle,getImgHtml}
         }
     })
 </script>

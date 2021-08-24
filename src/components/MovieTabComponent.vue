@@ -13,16 +13,7 @@
         <div ref="movieScrollWrapper" class="scroll-wrapper">
             <div class="scroll-container">
                 <div class="loading-box" v-if="!isInit"></div>
-                <ul class="movie-wrapper">
-                    <li v-for="item,index in list" class="movie-item" :key="'movie-item'+index">
-                        <div class="movie-img-wrapper">
-                            <img class="movie-img" :src="item.localImg"/>
-                            <span class="movie-state" v-if="item.viewingState">{{item.viewingState.replace(/\s/g,"")}}</span>
-                        </div>
-
-                        <div class="movie-name">{{item.movieName}}</div>
-                    </li>
-                </ul>
+                <MovieListComponent :movieList="list"></MovieListComponent>
                 <template v-if="list.length>0">
                     <div class="loading-tip" v-if="isEnd">已经到底了</div>
                     <div class="icon-loading" v-else></div>
@@ -34,12 +25,14 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import useMovieEffect from "../hooks/useMovieEffect";
+    import useMovieTabEffect from "../hooks/useMovieTabEffect";
     import {fomatTime} from "../utils";
+    import MovieListComponent from "./MovieListComponent.vue";
     export default defineComponent({
         name: 'MovieTabComponent',
+        components:{MovieListComponent},
         setup(){
-            const movieEffect = useMovieEffect();
+            const movieEffect = useMovieTabEffect();
             movieEffect.useInitMovie();
             return {
                 fomatTime,

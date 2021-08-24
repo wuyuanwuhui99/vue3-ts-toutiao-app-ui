@@ -8,7 +8,7 @@
                         <div id="user-name">{{userData.username}}</div>
                         <div id="user-sign">{{userData.sign}}</div>
                     </div>
-                    <i class="iconfont iconfont-set"></i>
+                    <i class="iconfont icon-edit"></i>
                 </div>
             </div>
             <div class="module-wrapper">
@@ -33,7 +33,7 @@
             </div>
             <div class="module-wrapper">
                 <ul class="classify-wrapper">
-                    <li class="classify-item" @click="goRouter('article')">
+                    <li class="classify-item" @click="goRouter('toutiao')">
                         <div class="title-wrapper">
                             <span>浏览过的文章</span>
                             <i class="iconfont iconfont-jiantou"></i>
@@ -81,13 +81,13 @@
 
 <script lang="ts">
     import {defineComponent} from 'vue';
-    import useMyEffect from "../hooks/useMyEffect";
+    import useMyTabEffect from "../hooks/useMyTabEffect";
     import {fomatTime} from "../utils";
     import state from "../store/state";
     export default defineComponent({
         name: 'MyTabComponent',
         setup(){
-            const myEffect = useMyEffect();
+            const myEffect = useMyTabEffect();
             return {
                 fomatTime,
                 userData:state.userData,
