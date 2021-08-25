@@ -24,4 +24,5 @@ export default {
     deleteComment:"/service/{type}-getway/deleteComment/{id}",//删除评论
     getReplyCommentList:"/service/{type}/getReplyCommentList",//获取回复列表
     getCommentItem:"/service/{type}/getCommentItem",//获取新增的单条评论或者回复
+    getMovieDetail:"/service/movie/getMovieDetail/",//获取电影详情
 }

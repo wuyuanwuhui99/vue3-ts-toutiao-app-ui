@@ -1,6 +1,6 @@
 <template>
     <ul class="movie-wrapper">
-        <li v-for="item,index in movieList" class="movie-item" :key="'movie-item'+index">
+        <li @click="goDetail(item.movieId)" v-for="item,index in movieList" class="movie-item" :key="'movie-item'+index">
             <div class="movie-img-wrapper">
                 <img class="movie-img" :src="item.localImg"/>
                 <span class="movie-state" v-if="item.viewingState">{{item.viewingState.replace(/\s/g,"")}}</span>
@@ -14,6 +14,7 @@
     import {defineComponent,PropType} from "vue";
     import {MovieInterface} from '../types';
     import MoreHandleComponent from "./MoreHandleComponent.vue";
+    import {useRouter} from "vue-router";
     export default defineComponent({
         name: 'VideoListComponent',
         components:{MoreHandleComponent},
@@ -24,8 +25,11 @@
             }
         },
         setup(){
-            return {
-            }
+            const router = useRouter();
+            const goDetail = (movieId:number)=>{
+                router.push(`/movieDetail/${movieId}`)
+            };
+            return {goDetail}
         }
     })
 </script>

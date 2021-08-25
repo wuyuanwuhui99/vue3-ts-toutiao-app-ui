@@ -18,6 +18,12 @@ const routes: Array<RouteRecordRaw> = [
         name: 'recordList',
         meta: {keepAlive: false},
         component: () => import('../pages/RecordListPage.vue')
+    },
+    {
+        path: '/movieDetail/:movieId',
+        name: 'movieDetail/:movieId',
+        meta: {keepAlive: false},
+        component: () => import('../pages/MovieDetaiPage.vue')
     }
 ];
 

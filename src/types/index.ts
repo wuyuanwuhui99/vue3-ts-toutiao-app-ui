@@ -90,7 +90,7 @@ export interface VideoInterface {
     description :string,//简单描述,
     targetHref:string,//链接地址,
     status:string,//0代表未使用，1表示正在使用，是banner和carousel图的才有,
-    score: string,//评分,
+    score: number,//评分,
     category:string,//类目，值为banner首屏，carousel：滚动轮播,
     ranks:string,//排名,
     authorId:string,//用户名，这这个表不需要，为了跟记录叫和收藏表的结构一致,
@@ -182,7 +182,7 @@ export interface MovieInterface {
     description:string,//简单描述
     targetHref:string,//链接地址
     useStatus:string,//0代表未使用，1表示正在使用，是banner和carousel图的才有
-    score:string,//评分
+    score:number,//评分
     category:string,//类目，值为banner首屏，carousel：滚动轮播
     ranks:string,//排名
     userId:string,//用户名，这这个表不需要，为了跟记录叫和收藏表的结构一致

@@ -17,6 +17,10 @@
   content: "\e63c";
 }
 
+.icon-edit:before {
+  content: "\e63c";
+}
+
 .iconfont-arrow:before{
   content: "\e615";
 }
@@ -38,6 +42,7 @@
 
 .iconfont-play:before {
   content: "\e701";
+  color: #fff;
 }
 
 .iconfont-tab-my:before {
