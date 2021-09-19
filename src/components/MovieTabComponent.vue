@@ -59,6 +59,7 @@
             .scroll-container{
                 min-height: 100%;
                 position: relative;
+                padding:@big-margin;
                 .loading-box{
                     z-index: 1;
                     width: 100%;

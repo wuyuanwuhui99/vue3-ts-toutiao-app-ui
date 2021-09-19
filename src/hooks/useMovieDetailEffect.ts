@@ -1,11 +1,15 @@
 import {reactive,toRefs} from "vue";
-import {getMovieDetailService} from "../service/movieDetailService";
+import {getMovieDetailService,getStarService,getMovieListByTypeService,getYourLikesService,getRecommendService} from "../service/movieDetailService";
 import {useRoute} from "vue-router";
-import {MovieInterface} from "@/types";
+import {MovieInterface,StarInterface} from "@/types";
 export default  async () => {
-    const stars = reactive<Array<string>>([]);
+    const scores = reactive<Array<string>>([]);
+    const stars = reactive<Array<StarInterface>>([]);
     const route: any = useRoute();
     const movieDetail = reactive<MovieInterface>(<MovieInterface>{});
+    const youLikes = reactive<Array<MovieInterface>>([]);
+    const recommendList = reactive<Array<MovieInterface>>([]);
+    const sameTypeList = reactive<Array<MovieInterface>>([]);
     /**
      * @author: wuwenqiang
      * @description: 显示点赞评论收藏的操作框
@@ -14,24 +18,47 @@ export default  async () => {
     const getStar = (score: number) => {
         for (let i = 0; i < 5; i++) {
             if ((i + 1) * 2 < score) {
-                stars.push("full")
+                scores.push("full");
             } else if ((i + 1) * 2 > score && i * 2 < score) {
-                stars.push("half")
+                scores.push("half");
             } else {
-                stars.push("empty")
+                scores.push("empty");
             }
         }
     };
     
-    getStar(5.8);
     
     await getMovieDetailService(route.params.movieId).then((res) => {
         Object.assign(movieDetail, res);
-        getStar(res.score)
+        getStar(res.score);
+    });
+    
+    getStarService(route.params.movieId).then((res)=>{
+        stars.push(...res);
+    });
+    
+    if(movieDetail.label){
+        getYourLikesService(movieDetail.label,movieDetail.classify).then(res=>{
+            youLikes.push(...res);
+        });
+    }
+    
+    if(movieDetail.type){
+        getMovieListByTypeService(movieDetail.type,movieDetail.classify).then(res=>{
+            sameTypeList.push(...res);
+        });
+    }
+    
+    getRecommendService(movieDetail.classify).then(res=>{
+        recommendList.push(...res);
     });
     
     return {
+        scores,
         stars,
+        youLikes,
+        sameTypeList,
+        recommendList,
         ...toRefs(movieDetail)
     }
 }

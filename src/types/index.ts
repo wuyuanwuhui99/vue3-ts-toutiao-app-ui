@@ -237,5 +237,18 @@ export interface CommentListPropsInterface {
     id:number
 }
 
+export interface StarInterface {
+    id:number,
+    starName:string,
+    img:string,
+    localImg:string,
+    createTime:string,
+    update_time:string,
+    movie_id:number,
+    role:string,
+    href:string
+    works:string
+}
+
 
 

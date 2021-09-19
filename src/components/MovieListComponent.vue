@@ -1,8 +1,8 @@
 <template>
-    <ul class="movie-wrapper">
-        <li @click="goDetail(item.movieId)" v-for="item,index in movieList" class="movie-item" :key="'movie-item'+index">
+    <ul class="movie-wrapper" :class="{'movie-wrapper-wrapper':direction == 'row'}">
+        <li @click="goDetail(item.movieId)" v-for="item,index in movieList" class="movie-item" :class="'movie-item-'+direction" :key="'movie-item'+index">
             <div class="movie-img-wrapper">
-                <img class="movie-img" :src="item.localImg"/>
+                <img class="movie-img" :src="item.localImg || item.img"/>
                 <span class="movie-state" v-if="item.viewingState">{{item.viewingState.replace(/\s/g,"")}}</span>
             </div>
             <div class="movie-name">{{item.movieName}}</div>
@@ -22,6 +22,11 @@
             movieList:{
                 type:Array as PropType<MovieInterface[]>,
                 required:true
+            },
+            direction:{
+                type:String as PropType<string>,
+                required:false,
+                default:"column"
             }
         },
         setup(){
@@ -39,21 +44,38 @@
     .movie-wrapper{
         display: flex;
         flex-wrap: wrap;
-        padding: @big-margin;
+        &.movie-wrapper-wrapper{
+            flex-wrap:nowrap ;
+            overflow: auto;
+            &::-webkit-scrollbar{
+                display: none;
+            }
+        }
         .movie-item{
             width: calc((100% - 1rem)/3);
             margin-bottom: @big-margin;
             display: flex;
             flex-direction: column;
             margin-left: @small-margin;
-            &:nth-child(3n+1){
+            &.movie-item-column{
+                margin-bottom: 0;
+                &:nth-child(3n+1){
+                    margin-left: 0;
+                }
+            }
+            &.movie-item-row{
                 margin-left: 0;
+                margin-right: @small-margin;
+                &:last-child{
+                    margin-right:0;
+                }
             }
             .movie-img-wrapper{
                 flex: 1;
                 position: relative;
                 .movie-img{
                     width: 100%;
+                    min-width: 6rem;
                     height: 100%;
                     border-radius: @border-raduis;
                 }

@@ -25,4 +25,8 @@ export default {
     getReplyCommentList:"/service/{type}/getReplyCommentList",//获取回复列表
     getCommentItem:"/service/{type}/getCommentItem",//获取新增的单条评论或者回复
     getMovieDetail:"/service/movie/getMovieDetail/",//获取电影详情
+    getStar:"/service/movie/getStar/",//获取演员表
+    getYourLikes:"/service/movie/getYourLikes",//获取猜你喜欢的电影
+    getMovieListByType:"/service/movie/getMovieListByType",//按类型获取获取电影
+    getRecommend:"/service/movie/getRecommend",//获取推荐的电影
 }
