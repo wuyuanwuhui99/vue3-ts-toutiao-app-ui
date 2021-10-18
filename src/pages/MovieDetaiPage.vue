@@ -10,12 +10,17 @@
             <div id="movie-title-wrapper">
                 <p id="movie-main-title">{{movieName}}</p>
                 <p id="movie-sub-title" v-if="star">{{star}}</p>
-                <div id="star-wrapper" v-if="score">
-                    <div id="movie-star">
-                        <i v-for="item,index in scores" class="icon-star" :class="'icon-star-'+item"></i>
+                <div id="handle-wrapper">
+                    <div id="star-wrapper">
+                        <div id="movie-star" v-if="score">
+                            <i v-for="item,index in scores" class="icon-star" :class="'icon-star-'+item"></i>
+                        </div>
+                        <div id="movie-score">{{score}}</div>
                     </div>
-                    <div id="movie-score">{{score}}</div>
+                    <span class="iconfont iconfont-more" @click="onMoreHandle"></span>
+                    <MoreHandleComponent v-if="showMoreHandle" :item="movieDetail" :type="'movie'"></MoreHandleComponent>
                 </div>
+
             </div>
         </div>
         <div class="desc-wrapper">
@@ -64,9 +69,10 @@
 <script lang="ts">
     import useMovieDetailEffect from "../hooks/useMovieDetailEffect";
     import MovieListComponent from "../components/MovieListComponent.vue";
+    import MoreHandleComponent from "../components/MoreHandleComponent.vue";
     export default {
         name: 'MovieDetaiPage',
-        components:{MovieListComponent},
+        components:{MovieListComponent,MoreHandleComponent},
         async setup(){
             const state = await useMovieDetailEffect();
             return {
@@ -127,33 +133,39 @@
                     white-space: nowrap;
                     font-size: @article-footer-font-size;
                 }
-                #star-wrapper{
+                #handle-wrapper{
                     display: flex;
                     margin-top: @small-margin;
-                    #movie-star{
+                    align-items: center;
+                    #star-wrapper{
                         display: flex;
-                        .icon-star{
-                            width: 1rem;
-                            height: 1rem;
-                            background-size: cover;
-                            background-repeat: no-repeat;
-                            margin-right: 0.2rem;
-                            &.icon-star-full{
-                                background-image: url("../assets/icon-star-full.png");
-                            }
-                            &.icon-star-half{
-                                background-image: url("../assets/icon-star-half.png");
-                            }
-                            &.icon-star-empty{
-                                background-image: url("../assets/icon-star-empty.png");
+                        flex: 1;
+                        #movie-star{
+                            display: flex;
+                            .icon-star{
+                                width: 1rem;
+                                height: 1rem;
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                margin-right: 0.2rem;
+                                &.icon-star-full{
+                                    background-image: url("../assets/icon-star-full.png");
+                                }
+                                &.icon-star-half{
+                                    background-image: url("../assets/icon-star-half.png");
+                                }
+                                &.icon-star-empty{
+                                    background-image: url("../assets/icon-star-empty.png");
+                                }
                             }
                         }
-                    }
-                    #movie-score{
-                        color: red;
-                        padding-left: @small-margin;
+                        #movie-score{
+                            color: red;
+                            padding-left: @small-margin;
+                        }
                     }
                 }
+
             }
         }
         .desc-wrapper{

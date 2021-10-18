@@ -96,6 +96,7 @@
 
 .iconfont-more:before {
   content: "\e639";
+  color: #bbb;
 }
 
 .iconfont-jiantou:before {

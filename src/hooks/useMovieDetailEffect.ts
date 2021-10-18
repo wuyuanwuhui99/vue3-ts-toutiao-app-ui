@@ -1,4 +1,4 @@
-import {reactive,toRefs} from "vue";
+import {reactive,toRefs,ref} from "vue";
 import {getMovieDetailService,getStarService,getMovieListByTypeService,getYourLikesService,getRecommendService} from "../service/movieDetailService";
 import {useRoute} from "vue-router";
 import {MovieInterface,StarInterface} from "@/types";
@@ -10,6 +10,7 @@ export default  async () => {
     const youLikes = reactive<Array<MovieInterface>>([]);
     const recommendList = reactive<Array<MovieInterface>>([]);
     const sameTypeList = reactive<Array<MovieInterface>>([]);
+    const showMoreHandle = ref<boolean>(false);
     /**
      * @author: wuwenqiang
      * @description: 显示点赞评论收藏的操作框
@@ -27,6 +28,9 @@ export default  async () => {
         }
     };
     
+    const onMoreHandle = ()=>{
+        showMoreHandle.value = true;
+    };
     
     await getMovieDetailService(route.params.movieId).then((res) => {
         Object.assign(movieDetail, res);
@@ -59,6 +63,9 @@ export default  async () => {
         youLikes,
         sameTypeList,
         recommendList,
+        showMoreHandle,
+        movieDetail,
+        onMoreHandle,
         ...toRefs(movieDetail)
     }
 }
